@@ -349,5 +349,61 @@ namespace MEIKO_QLKTX_API_V1.Models
 
         public virtual RM0010 RM0010 { get; set; }
     }
+    /// <summary>
+    /// Đây là bảng "lịch hẹn", .
+    /// </summary>
+    [Table("RM0015")]
+    public class RM0015
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RM0015_ID { get; set; }
+        public int RM0010_ID { get; set; }
+        public Nullable<DateTime> thoiGianPhongVan { get; set; }
+        public string ghiChu { get; set; }
+        public Nullable<bool> trangThai { get; set; }
+        public Nullable<bool> ketQua { get; set; }
+        public Nullable<int> vongPhongVan { get; set; }
+        public virtual ICollection<RM0015A> RM0015A { get; set; }
+
+    }
+    /// <summary>
+    /// Đây là bảng "chi tiet lich hen", .
+    /// </summary>
+    [Table("RM0015A")]
+    public class RM0015A
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RM0015A_ID { get; set; }
+        public int RM0015_ID { get; set; }
+        public int MKV9999_ID { get; set; }
+        public string ghiChu { get; set; }
+        public Nullable<bool> trangThai { get; set; }
+        public virtual RM0015 RM0015 { get; set; }
+
+
+    }
+    /// <summary>
+    /// Đây là bảng "đánh giá", .
+    /// </summary>
+    [Table("RM0013")]
+    public class RM0013
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RM0013_ID { get; set; }
+        public int RM0015_ID { get; set; }
+        public int MKV9999_ID { get; set; }
+        public int RM0006_ID { get; set; }
+        public string nhanXet { get; set; }
+        public string ghiChu { get; set; }
+        public Nullable<bool> ketQua { get; set; }
+        public Nullable<bool> trangThai { get; set; }
+        public virtual RM0015 RM0015 { get; set; }
+        public virtual RM0015 RM0006 { get; set; }
+
+
+    }
 }
 

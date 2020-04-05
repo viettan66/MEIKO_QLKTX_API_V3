@@ -313,6 +313,7 @@
     <Compile Include="Controllers\TUYENDUNG\RM0008Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0009Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0010Controller.cs" />
+    <Compile Include="Controllers\TUYENDUNG\RM0015Controller.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -388,6 +389,10 @@
     <Compile Include="Migrations\202004031035006_mydb030413.cs" />
     <Compile Include="Migrations\202004031035006_mydb030413.designer.cs">
       <DependentUpon>202004031035006_mydb030413.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004041335395_mydb040401.cs" />
+    <Compile Include="Migrations\202004041335395_mydb040401.designer.cs">
+      <DependentUpon>202004041335395_mydb040401.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DB.cs" />
@@ -535,6 +540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004031035006_mydb030413.resx">
       <DependentUpon>202004031035006_mydb030413.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004041335395_mydb040401.resx">
+      <DependentUpon>202004041335395_mydb040401.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -104,7 +104,48 @@ namespace QLKTX_API_V2.Controllers
         {
             using (DB db = new DB())
             {
-                var acc = (from temp in db.MKV9999 select temp).ToList();
+                var acc = (from p in db.MKV9999 select new
+                {
+                    p.MKV9999_ID,
+                    p.manhansu,
+                    p.matkhau,
+                    p.id,
+                    p.hodem,
+                    p.ten,
+                    p.type,
+                    p.ngaysinh,
+                    p.gioitinh,
+                    p.noisinh,
+                    p.quequan,
+                    p.diachithuongtru,
+                    p.diachitamtru,
+                    p.cmtnd_so,
+                    p.cmtnd_ngayhethan,
+                    p.cmtnd_noicap,
+                    p.hochieu_so,
+                    p.hochieu_ngaycap,
+                    p.hochieu_ngayhethan,
+                    p.ngayvaocongty,
+                    p.phong_id,
+                    p.ban_id,
+                    p.congdoan_id,
+                    p.chucvu_id,
+                    p.nganhang_stk,
+                    p.nganhang_id,
+                    p.sosobaohiem,
+                    p.honnhantinhtrang,
+                    p.datnuoc_id,
+                    p.phuongxa,
+                    p.suckhoetinhtrang,
+                    p.dienthoai_nharieng,
+                    p.dienthoai_didong,
+                    p.email,
+                    p.tinhtrangnhansu,
+                    p.thutu,
+                    p.chucvu,
+                    p.capbac,
+                    thetu_id=db.MKV9998.Where(o=>p.phong_id==o.phong_id).Select(o=>o.bophan_ten).FirstOrDefault(),
+                }).ToList();
 
                 return REST.GetHttpResponseMessFromObject(acc);
             }
