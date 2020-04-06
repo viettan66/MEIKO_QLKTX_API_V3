@@ -73,6 +73,7 @@ namespace MEIKO_QLKTX_API_V1.Models
         public DbSet<RM0015> RM0015 { get; set; }
         public DbSet<RM0015A> RM0015A { get; set; }
         public DbSet<RM0013> RM0013 { get; set; }
+        public DbSet<RM0007> RM0007 { get; set; }
     }
     /// <summary>
     /// Đây là lớp khởi tạo Database và Insert dữ liệu

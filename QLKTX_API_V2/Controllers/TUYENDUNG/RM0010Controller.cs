@@ -12,10 +12,10 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
     public class RM0010Controller : ApiController
     {
         [Route("Getall")]
-        [HttpGet]
-        public HttpResponseMessage Getall()
+        [HttpPost]
+        public HttpResponseMessage Getall([FromBody]ungvienget.filterungvien filter)
         {
-                return REST.GetHttpResponseMessFromObject(Getallungvien());
+                return REST.GetHttpResponseMessFromObject(ungvienget.Getallungvien(filter));
         }
         [Route("add")]
         [HttpPost]
@@ -25,11 +25,12 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
             {
                 result<object> rel = new result<object>();
                 RM0010 newj = value;
+                newj.trangthai = true;
                 db.RM0010.Add(newj);
                 try
                 {
                     db.SaveChanges();
-                    rel.set("OK", Getallungvien(value.RM0010_ID), "Thành công");
+                    rel.set("OK", ungvienget.Getallungvien(new ungvienget.filterungvien() {id= value.RM0010_ID}), "Thành công");
                 }
                 catch (Exception l)
                 {
@@ -110,7 +111,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         check.RM0081_E = value.RM0081_E;
                         check.RM0081_F = value.RM0081_F;
                         db.SaveChanges();
-                        rel.set("OK", Getallungvien(value.RM0010_ID), "Thành công");
+                        rel.set("OK", ungvienget.Getallungvien(new ungvienget.filterungvien() { id = value.RM0010_ID }), "Thành công");
                     }
                     catch (Exception l)
                     {
@@ -124,136 +125,6 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 return rel.ToHttpResponseMessage();
             }
         }
-        public object Getallungvien(int id=0)
-        {
-            using (DB db = new DB())
-            {
-                var data = db.RM0010.Select(p => new
-                {
-                    p.RM0010_ID,
-                    p.maID,
-                    p.HODEM,
-                    p.TEN,
-                    p.NGAYSINH,
-                    p.NOISINH,
-                    p.CMTND_SO,
-                    p.CMTND_NGAYCAP,
-                    p.CMTND_NOICAP,
-                    p.GIOITINH,
-                    p.HONNHAN,
-                    p.TELEPHONE,
-                    p.MOBILE,
-                    p.CHIEUCAO,
-                    p.CANNANG,
-                    p.EMAIL,
-                    p.THUONGTRU,
-                    p.TAMTRU,
-                    p.RM0001_ID,
-                    p.RM0001_ID2,
-                    p.NGAYCOTHELAM,
-                    p.THUNHAPMONGMUON,
-                    p.COTHELAMTHEM,
-                    p.COTHEDICONGTAC,
-                    p.COTHETHAYDOIDIADIEM,
-                    p.DATUNGTHITUYENMEIKO,
-                    p.NEUDATUNGTHITUYENMEIKO,
-                    p.ID_NGUONTHONGTIN,
-                    p.DUDINHTUONGLAI,
-                    p.SOTHICH,
-                    p.KHONGTHICH,
-                    p.CACPHAMCHATKYNANG,
-                    p.HOTENNGUOITHAN,
-                    p.DIACHINGUOITHAN,
-                    p.MOBILENGUOITHAN,
-                    p.ANHCHANDUNG,
-                    p.RM0011_ID1,
-                    p.RM0011_ID2,
-                    p.trangthai,
-                    p.DUDINHHOCTIEPCHUYENNGANH,
-                    p.DUDINHHOCTIEP,
-                    p.bophanid,
-                    RM0001=db.RM0001.Where(o=>o.RM0001_ID==p.RM0001_ID).Select(da=>new {
-                        da.ghiChu,da.maCongViec,da.moTa,da.RM0001_ID,da.RM0004_ID,da.tenCongViec,da.thuTu,da.tinhTrang
-                    }).FirstOrDefault(),
-                    RM0001_2=db.RM0001.Where(o=>o.RM0001_ID==p.RM0001_ID2).Select(da => new {
-                        da.ghiChu,
-                        da.maCongViec,
-                        da.moTa,
-                        da.RM0001_ID,
-                        da.RM0004_ID,
-                        da.tenCongViec,
-                        da.thuTu,
-                        da.tinhTrang
-                    }).FirstOrDefault(),
-                    RM0080 =db.RM0080.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da=>new {
-                        da.HOTEN,da.LAMGIODAU,da.QUANHE,da.RM0010_ID,da.RM0080_ID
-                    }).ToList(),
-                    RM0081_A =db.RM0081_A.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da => new {
-                        da.BATDAU,
-                        da.CHUYENNGANH,
-                        da.HEDAOTAO,
-                        da.RM0010_ID,
-                        da.KETTHUC,
-                        da. QUOCGIA   ,
-                        da.  RM0081_ID  ,
-                        da.  TENTRUONG  ,
-                        da.  TYPE  ,
-                        da. XEPLOAI   ,
-                    }).ToList(),
-                    RM0081_B =db.RM0081_B.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da => new {
-                        da.CHUNGCHI,
-                        da.DOC,
-                        da.NGAYCAP,
-                        da.NGHE,
-                        da.NGOAINGU,
-                        da.NOI,
-                        da.RM0010_ID,
-                        da.RM0081_ID,
-                        da.VIET,
-                        da.XEPLOAI,
-                    }).ToList(),
-                    RM0081_C =db.RM0081_C.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da => new {
-                        da.RM0010_ID,
-                        da.RM0081_ID,
-                        da.TENPHANMEM,
-                        da.TRINHDO,
-                    }).ToList(),
-                    RM0081_D =db.RM0081_D.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da => new {
-                        da.NAM,
-                        da.RM0002_ID,
-                        da.RM0010_ID,
-                        da.RM0081_ID,
-                        da.TENGIAITHUONG,
-                        da. TOCHUCTRAO,
-                    }).ToList(),
-                    RM0081_E =db.RM0081_E.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da => new {
-                        da.BATDAU,
-                        da.KETTHUC,
-                        da.LYDONGHIVIEC,
-                        da.MOTA,
-                        da.MUCLUONG,
-                        da.QUOCGIA,
-                        da. RM0010_ID,
-                        da.RM0081_ID ,
-                        da. TENCONGTY,
-                        da. TINH,
-                        da. VITRI,
-                    }).ToList(),
-                    RM0081_F =db.RM0081_F.Where(o=>o.RM0010_ID==p.RM0010_ID).Select(da => new {
-                        da.DONVI,
-                        da.HOTEN,
-                        da.MOBILE,
-                        da.RM0010_ID,
-                        da.RM0081_ID,
-                        da.VITRI,
-                    }).ToList(),
-                });
-                if (id != 0) {
-                    data = data.Where(p => p.RM0010_ID == id);
-                    return data.FirstOrDefault();
-                } else
-                return data.ToList();
-            }
-        }
+        
     }
 }

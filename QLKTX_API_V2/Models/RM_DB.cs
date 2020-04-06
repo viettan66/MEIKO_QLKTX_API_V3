@@ -120,7 +120,7 @@ namespace MEIKO_QLKTX_API_V1.Models
         public Nullable<int> thuTu { get; set; }
         public Nullable<bool> tinhTrang { get; set; }
         public string ghiChu { get; set; }
-        // public  RM0013 :RM0013[]    ;
+         public virtual ICollection<RM0013> RM0013 {  get; set; }
 
     }
     /// <summary>
@@ -359,12 +359,14 @@ namespace MEIKO_QLKTX_API_V1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RM0015_ID { get; set; }
         public int RM0010_ID { get; set; }
+        public int RM0008_ID { get; set; }
         public Nullable<DateTime> thoiGianPhongVan { get; set; }
         public string ghiChu { get; set; }
         public Nullable<bool> trangThai { get; set; }
         public Nullable<bool> ketQua { get; set; }
         public Nullable<int> vongPhongVan { get; set; }
         public virtual ICollection<RM0015A> RM0015A { get; set; }
+        public virtual RM0010 RM0010 { get; set; }
 
     }
     /// <summary>
@@ -401,7 +403,24 @@ namespace MEIKO_QLKTX_API_V1.Models
         public Nullable<bool> ketQua { get; set; }
         public Nullable<bool> trangThai { get; set; }
         public virtual RM0015 RM0015 { get; set; }
-        public virtual RM0015 RM0006 { get; set; }
+        public virtual RM0006 RM0006 { get; set; }
+
+
+    }
+    /// <summary>
+    /// Đây là bảng "Quyền đánh giá", .
+    /// </summary>
+    [Table("RM0007")]
+    public class RM0007
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RM0007_ID { get; set; }
+        public int MKV9999_ID { get; set; }
+        public int RM0006_ID { get; set; }
+        public Nullable<bool> trangThai { get; set; }
+        public virtual MKV9999 MKV9999 { get; set; }
+        public virtual RM0006 RM0006 { get; set; }
 
 
     }

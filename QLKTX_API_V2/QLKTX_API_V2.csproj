@@ -287,6 +287,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AccountGett.cs" />
     <Compile Include="Controllers\ADMIN\CommandController.cs" />
     <Compile Include="Controllers\ADMIN\MKV9981Controller.cs" />
     <Compile Include="Controllers\ADMIN\MKV9998Controller.cs" />
@@ -310,10 +311,13 @@
     <Compile Include="Controllers\TUYENDUNG\RM0003Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0004Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0006Controller.cs" />
+    <Compile Include="Controllers\TUYENDUNG\RM0007Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0008Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0009Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0010Controller.cs" />
+    <Compile Include="Controllers\TUYENDUNG\RM0013Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0015Controller.cs" />
+    <Compile Include="Controllers\TUYENDUNG\ungvienget.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -393,6 +397,26 @@
     <Compile Include="Migrations\202004041335395_mydb040401.cs" />
     <Compile Include="Migrations\202004041335395_mydb040401.designer.cs">
       <DependentUpon>202004041335395_mydb040401.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004060135543_mydb060401.cs" />
+    <Compile Include="Migrations\202004060135543_mydb060401.designer.cs">
+      <DependentUpon>202004060135543_mydb060401.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004060307276_mydb060402.cs" />
+    <Compile Include="Migrations\202004060307276_mydb060402.designer.cs">
+      <DependentUpon>202004060307276_mydb060402.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004060659331_mydb060403.cs" />
+    <Compile Include="Migrations\202004060659331_mydb060403.designer.cs">
+      <DependentUpon>202004060659331_mydb060403.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004061011318_mydb060406.cs" />
+    <Compile Include="Migrations\202004061011318_mydb060406.designer.cs">
+      <DependentUpon>202004061011318_mydb060406.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004061025024_mydb060409.cs" />
+    <Compile Include="Migrations\202004061025024_mydb060409.designer.cs">
+      <DependentUpon>202004061025024_mydb060409.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DB.cs" />
@@ -543,6 +567,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004041335395_mydb040401.resx">
       <DependentUpon>202004041335395_mydb040401.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004060135543_mydb060401.resx">
+      <DependentUpon>202004060135543_mydb060401.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004060307276_mydb060402.resx">
+      <DependentUpon>202004060307276_mydb060402.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004060659331_mydb060403.resx">
+      <DependentUpon>202004060659331_mydb060403.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004061011318_mydb060406.resx">
+      <DependentUpon>202004061011318_mydb060406.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004061025024_mydb060409.resx">
+      <DependentUpon>202004061025024_mydb060409.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
