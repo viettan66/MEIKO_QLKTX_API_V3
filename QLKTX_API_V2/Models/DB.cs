@@ -19,7 +19,7 @@ namespace MEIKO_QLKTX_API_V1.Models
         /// </summary>
     public class DB : DbContext
     {
-        public DB() : base("DefaultConnection1")
+        public DB() : base("DefaultConnection")
         {
 
         }
