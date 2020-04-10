@@ -61,7 +61,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.DUDINHHOCTIEPCHUYENNGANH,
                     p.DUDINHHOCTIEP,
                     p.bophanid,
-                    RM0001 = db.RM0001.Where(o => o.RM0001_ID == p.RM0001_ID).Select(da => new {
+                    RM0001 = db.RM0001.Where(o => o.RM0001_ID == p.RM0001_ID).Select(da => new
+                    {
                         da.ghiChu,
                         da.maCongViec,
                         da.moTa,
@@ -71,7 +72,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.thuTu,
                         da.tinhTrang
                     }).FirstOrDefault(),
-                    RM0001_2 = db.RM0001.Where(o => o.RM0001_ID == p.RM0001_ID2).Select(da => new {
+                    RM0001_2 = db.RM0001.Where(o => o.RM0001_ID == p.RM0001_ID2).Select(da => new
+                    {
                         da.ghiChu,
                         da.maCongViec,
                         da.moTa,
@@ -81,14 +83,16 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.thuTu,
                         da.tinhTrang
                     }).FirstOrDefault(),
-                    RM0080 = db.RM0080.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0080 = db.RM0080.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.HOTEN,
                         da.LAMGIODAU,
                         da.QUANHE,
                         da.RM0010_ID,
                         da.RM0080_ID
                     }).ToList(),
-                    RM0081_A = db.RM0081_A.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0081_A = db.RM0081_A.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.BATDAU,
                         da.CHUYENNGANH,
                         da.HEDAOTAO,
@@ -100,7 +104,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.TYPE,
                         da.XEPLOAI,
                     }).ToList(),
-                    RM0081_B = db.RM0081_B.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0081_B = db.RM0081_B.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.CHUNGCHI,
                         da.DOC,
                         da.NGAYCAP,
@@ -112,13 +117,15 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.VIET,
                         da.XEPLOAI,
                     }).ToList(),
-                    RM0081_C = db.RM0081_C.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0081_C = db.RM0081_C.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.RM0010_ID,
                         da.RM0081_ID,
                         da.TENPHANMEM,
                         da.TRINHDO,
                     }).ToList(),
-                    RM0081_D = db.RM0081_D.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0081_D = db.RM0081_D.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.NAM,
                         da.RM0002_ID,
                         da.RM0010_ID,
@@ -126,7 +133,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.TENGIAITHUONG,
                         da.TOCHUCTRAO,
                     }).ToList(),
-                    RM0081_E = db.RM0081_E.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0081_E = db.RM0081_E.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.BATDAU,
                         da.KETTHUC,
                         da.LYDONGHIVIEC,
@@ -139,7 +147,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.TINH,
                         da.VITRI,
                     }).ToList(),
-                    RM0081_F = db.RM0081_F.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new {
+                    RM0081_F = db.RM0081_F.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
+                    {
                         da.DONVI,
                         da.HOTEN,
                         da.MOBILE,
@@ -155,12 +164,102 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 }
                 if (filter.type != null)
                 {
-                    data = data.Where(p => p.trangthai ==filter.type);
+                    data = data.Where(p => p.trangthai == filter.type);
                     return data.ToList();
                 }
                 else
                     return data.ToList();
             }
+        }
+        public static bool updateungvien(RM0010 value)
+        {
+            using (DB db = new DB())
+            {
+                result<object> rel = new result<object>();
+                var check = db.RM0010.SingleOrDefault(p => p.RM0010_ID == value.RM0010_ID);
+                if (check != null)
+                {
+                    check.maID = value.maID;
+                    check.HODEM = value.HODEM;
+                    check.TEN = value.TEN;
+                    check.NGAYSINH = value.NGAYSINH;
+                    check.NOISINH = value.NOISINH;
+                    check.CMTND_SO = value.CMTND_SO;
+                    check.CMTND_NGAYCAP = value.CMTND_NGAYCAP;
+                    check.CMTND_NOICAP = value.CMTND_NOICAP;
+                    check.GIOITINH = value.GIOITINH;
+                    check.HONNHAN = value.HONNHAN;
+                    check.TELEPHONE = value.TELEPHONE;
+                    check.MOBILE = value.MOBILE;
+                    check.CHIEUCAO = value.CHIEUCAO;
+                    check.CANNANG = value.CANNANG;
+                    check.EMAIL = value.EMAIL;
+                    check.THUONGTRU = value.THUONGTRU;
+                    check.TAMTRU = value.TAMTRU;
+                    check.RM0001_ID = value.RM0001_ID;
+                    check.RM0001_ID2 = value.RM0001_ID2;
+                    check.NGAYCOTHELAM = value.NGAYCOTHELAM;
+                    check.THUNHAPMONGMUON = value.THUNHAPMONGMUON;
+                    check.COTHELAMTHEM = value.COTHELAMTHEM;
+                    check.COTHEDICONGTAC = value.COTHEDICONGTAC;
+                    check.COTHETHAYDOIDIADIEM = value.COTHETHAYDOIDIADIEM;
+                    check.DATUNGTHITUYENMEIKO = value.DATUNGTHITUYENMEIKO;
+                    check.NEUDATUNGTHITUYENMEIKO = value.NEUDATUNGTHITUYENMEIKO;
+                    check.ID_NGUONTHONGTIN = value.ID_NGUONTHONGTIN;
+                    check.DUDINHTUONGLAI = value.DUDINHTUONGLAI;
+                    check.SOTHICH = value.SOTHICH;
+                    check.KHONGTHICH = value.KHONGTHICH;
+                    check.CACPHAMCHATKYNANG = value.CACPHAMCHATKYNANG;
+                    check.HOTENNGUOITHAN = value.HOTENNGUOITHAN;
+                    check.DIACHINGUOITHAN = value.DIACHINGUOITHAN;
+                    check.MOBILENGUOITHAN = value.MOBILENGUOITHAN;
+                    check.ANHCHANDUNG = value.ANHCHANDUNG;
+                    check.RM0011_ID1 = value.RM0011_ID1;
+                    check.RM0011_ID2 = value.RM0011_ID2;
+                    check.trangthai = value.trangthai;
+                    check.DUDINHHOCTIEPCHUYENNGANH = value.DUDINHHOCTIEPCHUYENNGANH;
+                    check.DUDINHHOCTIEP = value.DUDINHHOCTIEP;
+                    check.bophanid = value.bophanid;
+                    try
+                    {
+                        db.SaveChanges();
+
+                        db.RM0081_A.RemoveRange(check.RM0081_A);
+                        db.RM0081_B.RemoveRange(check.RM0081_B);
+                        db.RM0081_C.RemoveRange(check.RM0081_C);
+                        db.RM0081_D.RemoveRange(check.RM0081_D);
+                        db.RM0081_E.RemoveRange(check.RM0081_E);
+                        db.RM0081_F.RemoveRange(check.RM0081_F);
+                        db.RM0080.RemoveRange(check.RM0080);
+                        db.SaveChanges();
+                        check.RM0080 = value.RM0080;
+                        check.RM0081_A = value.RM0081_A;
+                        check.RM0081_B = value.RM0081_B;
+                        check.RM0081_C = value.RM0081_C;
+                        check.RM0081_D = value.RM0081_D;
+                        check.RM0081_E = value.RM0081_E;
+                        check.RM0081_F = value.RM0081_F;
+                        db.SaveChanges();
+                        return true;
+                        rel.set("OK", ungvienget.Getallungvien(new ungvienget.filterungvien() { id = value.RM0010_ID }), "Thành công");
+                    }
+                    catch (Exception l)
+                    {
+
+                        return false;
+                        rel.set("ERR", null, "Thất bại:" + l.Message);
+                    }
+                }
+                else
+                {
+                    return false;
+                    rel.set("NaN", null, "Không tìm thấy dữ liệu.");
+                }
+                return false;
+               // return rel.ToHttpResponseMessage();
+
+            }
+
         }
     }
 }

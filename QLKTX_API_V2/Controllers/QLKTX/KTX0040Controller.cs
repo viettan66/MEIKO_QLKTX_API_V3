@@ -52,6 +52,38 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                 return REST.GetHttpResponseMessFromObject(temp.ToList());
             }
         }
+        [Route("delete")]
+        [HttpPut]
+        public HttpResponseMessage update([FromBody]KTX0040[] values)
+        {
+            using (DB db = new DB())
+            {
+                results<KTX0040> list = new results<KTX0040>();
+                values.ToList().ForEach(value =>
+                {
+                    result<KTX0040> rel = new result<KTX0040>();
+                    var check = db.KTX0040.SingleOrDefault(p => p.KTX0040_ID == value.KTX0040_ID);
+                    if (check != null)
+                    {
+                        db.KTX0040.Remove(check);
+                        try
+                        {
+                            db.SaveChanges();
+                            rel.set("OK", value, "Thành công");
+                        }
+                        catch (Exception l)
+                        {
+                            rel.set("ERR", value, "Thất bại:" + l.Message);
+                        }
+
+                    }
+                    else
+                        rel.set("NaN", null, "Thành công");
+                    list.add(rel);
+                });
+                return list.ToHttpResponseMessage();
+            }
+        }
 
         [Route("update")]
         [HttpPost]

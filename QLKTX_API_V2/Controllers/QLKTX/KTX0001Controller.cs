@@ -17,6 +17,7 @@ namespace QLKTX_API_V2.Controllers.QLKTX
         public HttpResponseMessage add([FromBody]KTX0001[] values)
         {
 
+            if (values == null) return null;
             DB db = new DB();
             results<KTX0001> list = new results<KTX0001>();
             foreach (var value in values)
@@ -34,7 +35,7 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                         db.SaveChanges();
                         for (int i = 0; i < t.slot; i++)
                         {
-                            db.KTX0002.Add(new KTX0002() { ghichu = "Giường trống", KTX0001_ID = t.KTX0001_ID, ten = "GA-" + t.ten.Replace("-", "") + "-G0" + (i + 1), thutu = i, trangthai = false });
+                            db.KTX0002.Add(new KTX0002() { ghichu = "Giường trống", KTX0001_ID = t.KTX0001_ID, ten = "GA-" /*+ t.ten.Replace("", "")*/+t.ten + "-G0" + (i + 1), thutu = i, trangthai = false });
 
                         }
                         db.SaveChanges();

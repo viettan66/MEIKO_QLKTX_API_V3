@@ -46,11 +46,14 @@ namespace MEIKO_QLKTX_API_V1.Models
         public DbSet<MKV9982> MKV9982 { get; set; }
         public DbSet<MKV9983> MKV9983 { get; set; }
         public DbSet<MKV9984> MKV9984 { get; set; }
+        public DbSet<MKV8001> MKV8001 { get; set; }
+
         public DbSet<KTX0020> KTX0020 { get; set; }
         public DbSet<KTX0021> KTX0021 { get; set; }
         public DbSet<KTX0022> KTX0022 { get; set; }
         public DbSet<KTX0023> KTX0023 { get; set; }
         public DbSet<MKV8000> KTX8000 { get; set; }
+
         public DbSet<KTX0040> KTX0040 { get; set; }
 
 
@@ -720,6 +723,20 @@ namespace MEIKO_QLKTX_API_V1.Models
         public string ST16 { get; set; }
         public string ST17 { get; set; }
         public string ST18 { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "cài đặt", .
+    /// </summary>
+    [Table("MKV8001")]
+    public class MKV8001
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Nullable<int> MKV8001_ID { get; set; }
+        public string taikhoan { get; set; }
+        public string sdt { get; set; }
+        public string cmnd { get; set; }
+        public Nullable<bool> trangthai { get; set; }
     }
 
 

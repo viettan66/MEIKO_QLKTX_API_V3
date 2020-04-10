@@ -12,10 +12,10 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
     public class RM0015Controller : ApiController
     {
         [Route("Getall")]
-        [HttpGet]
-        public HttpResponseMessage Getall()
+        [HttpPost]
+        public HttpResponseMessage Getall([FromBody]filter filter)
         {
-            object fd = getallRM0015(new filter() { type = false });
+            object fd = getallRM0015(filter);
             return REST.GetHttpResponseMessFromObject(fd);
 
         }
@@ -28,10 +28,10 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
 
         }
         [Route("Getalldanhgia")]
-        [HttpGet]
-        public HttpResponseMessage Getalldanhgia()
+        [HttpPost]
+        public HttpResponseMessage Getalldanhgia([FromBody]filter filter)
         {
-            object fd = getallRM0015(new filter() { type=true});
+            object fd = getallRM0015(filter);
                 return REST.GetHttpResponseMessFromObject(fd);
             
         }
@@ -132,7 +132,47 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 return rel.ToHttpResponseMessage();
             }
         }
-
+        [Route("update2")]
+        [HttpPost]
+        public HttpResponseMessage hoanthanhdanhgia([FromBody]RM0015[] data)
+        {
+            using (DB db = new DB())
+            {
+                results<object> list = new results<object>();
+                data.ToList().ForEach(values =>
+                {
+                    result<object> rel = new result<object>();
+                    var check = db.RM0015.SingleOrDefault(p => p.RM0015_ID == values.RM0015_ID);
+                    if (check != null)
+                    {
+                        check.ghiChu = values.ghiChu;
+                        check.ketQua = values.ketQua;
+                        check.RM0008_ID = values.RM0008_ID;
+                        check.RM0010_ID = values.RM0010_ID;
+                        check.thoiGianPhongVan = values.thoiGianPhongVan;
+                        check.trangThai = values.trangThai;
+                        check.vongPhongVan = values.vongPhongVan;
+                        try
+                        {
+                            db.SaveChanges();
+                            db.RM0015A.RemoveRange(check.RM0015A);
+                            db.SaveChanges();
+                            check.RM0015A = values.RM0015A;
+                            db.SaveChanges();
+                            rel.set("OK", getallRM0015(new filter() { id = check.RM0015_ID }), "Thành công.");
+                        }
+                        catch (Exception fd)
+                        {
+                            rel.set("ERR", null, "Thất bại: " + fd.Message);
+                        }
+                    }
+                    else
+                        rel.set("NaN", null, "Không thấy dữ liệu.");
+                    list.add(rel);
+                });
+                return list.ToHttpResponseMessage();
+            }
+        }
         [Route("delete/{id}")]
         [HttpGet]
         public HttpResponseMessage delete(int id)
@@ -169,7 +209,10 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         public struct filter
         {
             public Nullable<int> id { get; set; }
+            public Nullable<int> MKV9999_ID { get; set; }
+            public string phong_id { get; set; }
             public Nullable<bool> type { get; set; }
+            public Nullable<bool> trangthai { get; set; }
         }
     public object getallRM0015(filter filter)
         {
@@ -182,8 +225,9 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.RM0010_ID,
                     p.RM0015_ID,
                     p.RM0008_ID,
-                    ngayPV=DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("yyyy-MM-dd"),
-                    thoiGianPV=DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("hh:mm"),
+                        p.thoiGianPhongVan,
+                    ngayPV= p.thoiGianPhongVan!=null?DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("yyyy-MM-dd"):"",
+                    thoiGianPV=p.thoiGianPhongVan!=null?DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("hh:mm"):"",
                     p.trangThai,
                     p.vongPhongVan,
                     RM0008 = db.RM0008.Where(m => m.RM0008_ID == p.RM0008_ID).Select(m => new { m.DiaDiem, m.ghiChu, m.maDiaDiem, m.RM0008_ID }).FirstOrDefault(),
@@ -288,16 +332,33 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         }).FirstOrDefault(),
                     }).ToList(),
                     RM0010 = ungvienget.Getallungvien(new ungvienget.filterungvien() { id = p.RM0010_ID }),
-                }).ToList();
+                });
                 if (filter.id != null)
                 {
                     return data.Where(p => p.RM0015_ID == filter.id).FirstOrDefault();
                 }
+                if (filter.MKV9999_ID != null)
+                {
+                    data= data.Where(p =>db.RM0015A.Where(j=>j.MKV9999_ID==filter.MKV9999_ID).Select(j=>j.RM0015_ID).Distinct().Contains(p.RM0015_ID )).ToList();
+                }
+                if (filter.phong_id != null)
+                {
+                    data= data.Where(p =>db.RM0015A.Where(
+                        j=>db.MKV9999.Where(u=>u.phong_id==filter.phong_id).Select(u=>u.MKV9999_ID).Contains( j.MKV9999_ID)
+                        ).Select(j=>j.RM0015_ID).Distinct().Contains(p.RM0015_ID )).ToList();
+                }
                 if (filter.type != null)
                 {
                     if (filter.type == true)
-                        return data.Where(p => DateTime.Parse(p.ngayPV).Date <= DateTime.Now.Date ).ToList();
-                    else  return data.Where(p => DateTime.Parse(p.ngayPV).Date >= DateTime.Now.Date ).ToList();
+                        data = data.Where(p => DateTime.Parse(p.ngayPV).Date <= DateTime.Now.Date).ToList();
+                    else data = data.Where(p => DateTime.Parse(p.ngayPV).Date >= DateTime.Now.Date).ToList();
+                }
+                if (filter.trangthai != null)
+                {
+                    if (filter.trangthai == true)
+                        data = data.Where(p =>p.trangThai==true).ToList();
+                    else
+                        data = data.Where(p => p.trangThai == false).ToList();
                 }
                 return data.ToList();
             }

@@ -12,6 +12,51 @@ namespace QLKTX_API_V2.Controllers.QLKTX
     [RoutePrefix("api/KTX0002")]
     public class KTX0002Controller : ApiController
     {
+
+        [Route("Add")]
+        [HttpPost]
+        public HttpResponseMessage Add([FromBody]KTX0002[] values)
+        {
+            if (values == null) return null;
+            using (DB db = new DB())
+            {
+                results<KTX0002> list = new results<KTX0002>();
+                foreach (var value in values)
+                {
+                    result<KTX0002> rel = new result<KTX0002>();
+                    var checkphong = db.KTX0001.Where(p => p.KTX0001_ID == value.KTX0001_ID || p.ten == value.ghichu).FirstOrDefault();
+                    if (checkphong != null)
+                    {
+                        var checkmakhoa = db.KTX0002.FirstOrDefault(p => p.ten == value.ten);
+                        if (checkmakhoa == null)
+                        {
+                            KTX0002 k = new KTX0002() { KTX0001_ID = checkphong.KTX0001_ID, ghichu = value.ghichu, ten = value.ten,   trangthai = value.trangthai, type = value.type };
+                            db.KTX0002.Add(k);
+                            try
+                            {
+                                db.SaveChanges();
+                                //k.KTX0001 = null;
+                                rel.set("OK", k, "Thành Công.");
+                            }
+                            catch (Exception t)
+                            {
+                                rel.set("ERR", value, "Thất bại: " + t.Message);
+                            }
+                        }
+                        else
+                        {
+                            rel.set("ERR", value, "Thất bại: Mã khóa phòng này đã tồn tại.");
+                        }
+                    }
+                    else
+                    {
+                        rel.set("NaN", value, "Thất bại: Không tìm thấy thông tin phòng.");
+                    }
+                    list.add(rel);
+                }
+                return list.ToHttpResponseMessage();
+            }
+        }
         [Route("Getall/{id}")]
         [HttpGet]
         public HttpResponseMessage Getall(int id)

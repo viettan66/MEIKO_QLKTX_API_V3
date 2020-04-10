@@ -672,5 +672,143 @@ namespace QLKTX_API_V2.Controllers.QLKTX
             }
             return REST.GetHttpResponseMessFromObject(table.ToList());
         }
+
+        [Route("upload")]
+        [HttpPost]
+        public HttpResponseMessage upload([FromBody]KTX0020[] valuess)
+        {
+            if (valuess == null) return null;
+            using (DB db = new DB())
+            {
+                var taisan = db.KTX0010.Where(p => p.trangthai == true&&p.loai==2&&p.soluongmacdinh>0).Select(p => new
+                {
+                    p.ghichu,
+                    p.giatien,
+                    p.KTX0010_ID,
+                    p.loai,
+                    p.soluongmacdinh,
+                    p.soluongfull,
+                    p.ten,
+                    p.thutu,
+                    p.trangthai,
+                    p.WH0007_ID,
+                    p.maSanPham,
+                });
+                results<KTX0020> list = new results<KTX0020>();
+                valuess.ToList().ForEach(values =>
+                {
+                    result<KTX0020> rel = new result<KTX0020>();
+                    try
+                    {
+                        KTX0020 newktx0020 = new KTX0020()
+                        {
+                            KTX0020_ID = values.KTX0020_ID,
+                            MKV9999_ID = values.MKV9999_ID,
+                            ngaytaodon = values.ngaytaodon,
+                            trangthai = values.trangthai,
+                            trangthai2 = values.trangthai2,
+                            bengiao = values.bengiao,
+                            bennhan = values.bennhan,
+                            bietngoaingu = values.bietngoaingu,
+                            biettiengdantocitnguoi = values.biettiengdantocitnguoi,
+                            bqlktx = values.bqlktx,
+                            choohiennay = values.choohiennay,
+                            chunhiemnoilamviec = values.chunhiemnoilamviec,
+                            cmtnd_ngaycap = values.cmtnd_ngaycap,
+                            cmtnd_noicap = values.cmtnd_noicap,
+                            cmtnd_so = values.cmtnd_so,
+                            dantoc = values.dantoc,
+                            didong = values.didong,
+                            ghichu = values.ghichu,
+                            ghichu2 = values.ghichu2,
+                            gioitinh = values.gioitinh,
+                            hotenkhac = values.hotenkhac,
+                            hotenkhaisinh = values.hotenkhaisinh,
+                            khoaphong = db.KTX0001.Where(p => p.ten == values.ghichu2).Select(p => p.makhoa).FirstOrDefault(),
+                            KTX0001_ID = db.KTX0001.Where(p=>p.ten==values.ghichu2).Select(p=>p.KTX0001_ID).FirstOrDefault(),
+                            KTX0002_ID = db.KTX0002.Where(p => p.ten == values.ghichu).Select(p => p.KTX0002_ID).FirstOrDefault(),
+                            KTX0003_ID = db.KTX0003.Where(p => p.MaKhoa == values.sokhoatu).Select(p => p.KTX0003_ID).FirstOrDefault(),
+                            lamgiodautu14tuoi = values.lamgiodautu14tuoi,
+                            lydo = values.lydo,
+                            lydodangkyoktx = values.lydodangkyoktx,
+                            lydonguyenvong = values.lydonguyenvong,
+                            ngaycohieuluc = values.ngaycohieuluc,
+                            ngayduyetdon = values.ngayduyetdon,
+                            ngayokitucxa = values.ngayokitucxa,
+                            ngayquaylaikytucxa = values.ngayquaylaikytucxa,
+                            ngaysinh = values.ngaysinh,
+                            nghenghiepchucvunoilam = values.nghenghiepchucvunoilam,
+                            nguyenvongophongso = values.nguyenvongophongso,
+                            nharieng = values.nharieng,
+                            noidung = values.noidung,
+                            noisinh = values.noisinh,
+                            noithuongtru = values.noithuongtru,
+                            okitucxa = values.okitucxa,
+                            quaylaikytucxa = values.quaylaikytucxa,
+                            quequan = values.quequan,
+                            sokhoatu = values.sokhoatu,
+                            somayle = values.somayle,
+                            sotu = db.KTX0003.Where(p => p.MaKhoa == values.sokhoatu).Select(p => p.SoTu).FirstOrDefault(),
+                            thoigiantralantruoc = values.thoigiantralantruoc,
+                            tongiao = values.tongiao,
+                            trinhdchuyenmon = values.trinhdchuyenmon,
+                            trinhdohocvan = values.trinhdohocvan,
+                            tienantoidanhhinhphat = values.tienantoidanhhinhphat,
+                            truongphongGA = values.truongphongGA,
+                            truongphongnoilamviec = values.truongphongnoilamviec,
+                            KTX0021 = values.KTX0021,
+                            KTX0022 = values.KTX0022,
+                            capbac = values.capbac
+                        };
+                        newktx0020.trangthai2 = false;
+                        newktx0020.MKV9999 = null;
+                        db.KTX0020.Add(newktx0020);
+                        db.SaveChanges();
+                         db.KTX0003.Where(p => p.KTX0003_ID == newktx0020.KTX0003_ID).ToList().ForEach(k =>
+                        {
+                            k.trangthai = true;
+                        });
+                         db.KTX0002.Where(p => p.KTX0002_ID == newktx0020.KTX0002_ID).ToList().ForEach(k =>
+                        {
+                            k.trangthai = true;
+                        });
+                        db.SaveChanges();
+                        taisan.ToList().ForEach(val =>
+                        {
+                            var check = db.KTX0031.FirstOrDefault(p => p.KTX0010_ID == val.KTX0010_ID && p.MKV9999_ID == newktx0020.MKV9999_ID && p.trangthai == true);
+                            if (check == null)
+                            {
+                                db.KTX0031.Add(new KTX0031()
+                                {
+                                    ghichu = "Thêm từ chức năng upload file excel",
+                                    KTX0010_ID=val.KTX0010_ID,
+                                    MKV9999_ID=newktx0020.MKV9999_ID,
+                                    ngaycap=newktx0020.ngayduyetdon,
+                                    soluongcap=val.soluongmacdinh,
+                                    trangthai=true,
+                                    
+                                });
+                                try
+                                {
+                                    db.SaveChanges();
+                                }
+                                catch 
+                                {
+                                }
+                            }
+                        });
+                        values.KTX0020_ID = newktx0020.KTX0020_ID;
+                        rel.set("OK", values, "Thành công");
+                    }
+                    catch (ContextMarshalException rr)
+                    {
+
+                        rel.set("ERR", values, "Thất bại: " + rr.Message);
+                    }
+                    list.add(rel);
+                });
+            return list.ToHttpResponseMessage();
+            }
+        }
     }
 }

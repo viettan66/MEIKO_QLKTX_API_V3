@@ -289,6 +289,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountGett.cs" />
     <Compile Include="Controllers\ADMIN\CommandController.cs" />
+    <Compile Include="Controllers\ADMIN\GetMKV9998.cs" />
+    <Compile Include="Controllers\ADMIN\MKV8001Controller.cs" />
     <Compile Include="Controllers\ADMIN\MKV9981Controller.cs" />
     <Compile Include="Controllers\ADMIN\MKV9998Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -316,6 +318,7 @@
     <Compile Include="Controllers\TUYENDUNG\RM0009Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0010Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0013Controller.cs" />
+    <Compile Include="Controllers\TUYENDUNG\RM0015AController.cs" />
     <Compile Include="Controllers\TUYENDUNG\RM0015Controller.cs" />
     <Compile Include="Controllers\TUYENDUNG\ungvienget.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -417,6 +420,14 @@
     <Compile Include="Migrations\202004061025024_mydb060409.cs" />
     <Compile Include="Migrations\202004061025024_mydb060409.designer.cs">
       <DependentUpon>202004061025024_mydb060409.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004090336563_mydb090401.cs" />
+    <Compile Include="Migrations\202004090336563_mydb090401.designer.cs">
+      <DependentUpon>202004090336563_mydb090401.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004090345382_mydb090402.cs" />
+    <Compile Include="Migrations\202004090345382_mydb090402.designer.cs">
+      <DependentUpon>202004090345382_mydb090402.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DB.cs" />
@@ -582,6 +593,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004061025024_mydb060409.resx">
       <DependentUpon>202004061025024_mydb060409.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004090336563_mydb090401.resx">
+      <DependentUpon>202004090336563_mydb090401.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004090345382_mydb090402.resx">
+      <DependentUpon>202004090345382_mydb090402.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

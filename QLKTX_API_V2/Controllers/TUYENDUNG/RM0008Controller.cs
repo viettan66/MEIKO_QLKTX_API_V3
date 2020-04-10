@@ -27,6 +27,65 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 return REST.GetHttpResponseMessFromObject(data.ToList());
             }
         }
+        [Route("update")]
+        [HttpPut]
+        public HttpResponseMessage update([FromBody]RM0008 value)
+        {
+            using (DB db = new DB())
+            {
+                result<RM0008> rel = new result<RM0008>();
+                var check = db.RM0008.SingleOrDefault(p => p.RM0008_ID == value.RM0008_ID);
+                if (check != null)
+                {
+                    check.ghiChu = value.ghiChu;
+                    check.maDiaDiem = value.maDiaDiem;
+                    check.DiaDiem = value.DiaDiem;
+                    try
+                    {
+                        db.SaveChanges();
+                        rel.set("OK", value, "Thành công");
+                    }
+                    catch (Exception l)
+                    {
+                        rel.set("ERR", value, "Thất bại:" + l.Message);
+                    }
+
+                }
+                return rel.ToHttpResponseMessage();
+            }
+        }
+        [Route("delete")]
+        [HttpPut]
+        public HttpResponseMessage update([FromBody]RM0008[] values)
+        {
+            using (DB db = new DB())
+            {
+                results<RM0008> list = new results<RM0008>();
+                values.ToList().ForEach(value =>
+                {
+                    result<RM0008> rel = new result<RM0008>();
+                    var check = db.RM0008.SingleOrDefault(p => p.RM0008_ID == value.RM0008_ID);
+                    if (check != null)
+                    {
+                        db.RM0008.Remove(check);
+                        try
+                        {
+                            db.SaveChanges();
+                            rel.set("OK", value, "Thành công");
+                        }
+                        catch (Exception l)
+                        {
+                            rel.set("ERR", value, "Thất bại:" + l.Message);
+                        }
+
+                    }
+                    else
+                        rel.set("NaN", null, "Thành công");
+                    list.add(rel);
+                });
+                return list.ToHttpResponseMessage();
+            }
+        }
         [Route("add")]
         [HttpPost]
         public HttpResponseMessage add([FromBody]RM0008 value)

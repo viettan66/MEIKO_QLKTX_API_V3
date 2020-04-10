@@ -29,6 +29,67 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 return REST.GetHttpResponseMessFromObject(data.ToList());
             }
         }
+        [Route("update")]
+        [HttpPut]
+        public HttpResponseMessage update([FromBody]RM0003 value)
+        {
+            using (DB db = new DB())
+            {
+                result<RM0003> rel = new result<RM0003>();
+                var check = db.RM0003.SingleOrDefault(p => p.RM0003_ID == value.RM0003_ID);
+                if (check != null)
+                {
+                    check.ghiChu = value.ghiChu;
+                    check.maBacDaoTao = value.maBacDaoTao;
+                    check.tenBacDaoTao = value.tenBacDaoTao;
+                    check.thuTu = value.thuTu;
+                    check.tinhTrang = value.tinhTrang;
+                    try
+                    {
+                        db.SaveChanges();
+                        rel.set("OK", value, "Thành công");
+                    }
+                    catch (Exception l)
+                    {
+                        rel.set("ERR", value, "Thất bại:" + l.Message);
+                    }
+
+                }
+                return rel.ToHttpResponseMessage();
+            }
+        }
+        [Route("delete")]
+        [HttpPut]
+        public HttpResponseMessage update([FromBody]RM0003[] values)
+        {
+            using (DB db = new DB())
+            {
+                results<RM0003> list = new results<RM0003>();
+                values.ToList().ForEach(value =>
+                {
+                    result<RM0003> rel = new result<RM0003>();
+                    var check = db.RM0003.SingleOrDefault(p => p.RM0003_ID == value.RM0003_ID);
+                    if (check != null)
+                    {
+                        db.RM0003.Remove(check);
+                        try
+                        {
+                            db.SaveChanges();
+                            rel.set("OK", value, "Thành công");
+                        }
+                        catch (Exception l)
+                        {
+                            rel.set("ERR", value, "Thất bại:" + l.Message);
+                        }
+
+                    }
+                    else
+                        rel.set("NaN", null, "Thành công");
+                    list.add(rel);
+                });
+                return list.ToHttpResponseMessage();
+            }
+        }
         [Route("add")]
         [HttpPost]
         public HttpResponseMessage add([FromBody]RM0003 value)

@@ -37,8 +37,14 @@ namespace QLKTX_API_V2.Controllers.ADMIN
                     rel.set("ERR", values, "Đã có");
 
                 }
-                return  rel.ToHttpResponseMessage();
+                return rel.ToHttpResponseMessage();
             }
+        }
+        [Route("Getall")]
+        [HttpPost]
+        public HttpResponseMessage Getall(GetMKV9998.filter filter)
+        {
+            return REST.GetHttpResponseMessFromObject(GetMKV9998.Get(filter));
         }
     }
 }

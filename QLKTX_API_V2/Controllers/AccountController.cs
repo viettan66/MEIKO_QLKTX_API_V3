@@ -74,7 +74,7 @@ namespace QLKTX_API_V2.Controllers
             result<MKV9999> rel = new result<MKV9999>();
             DB db = new DB();
             var kj = value;
-            var ch = db.MKV9999.SingleOrDefault(p => p.manhansu == value.manhansu);
+            var ch = db.MKV9999.Where(p => p.manhansu == value.manhansu).FirstOrDefault();
             if (ch == null)
             {
                 db.MKV9999.Add(kj);
@@ -93,7 +93,7 @@ namespace QLKTX_API_V2.Controllers
             }
             else
             {
-                rel.set("ERR", kj, "Tài khoản này đã tồn tại, bạn hãy sử dụng chức năng Quên mật khẩu!");
+                rel.set("exist", ch, "Tài khoản này đã tồn tại, bạn hãy sử dụng chức năng Quên mật khẩu!");
             }
             return (rel.ToHttpResponseMessage());
         }

@@ -149,19 +149,20 @@ namespace QLKTX_API_V2.Controllers.QLKTX
         [HttpPost]
         public HttpResponseMessage Add([FromBody]KTX0003[] values)
         {
+            if (values == null) return null;
             using (DB db = new DB())
             {
                 results<KTX0003> list = new results<KTX0003>();
                 foreach (var value in values)
                 {
                     result<KTX0003> rel = new result<KTX0003>();
-                    var checkphong = db.KTX0001.SingleOrDefault(p => p.KTX0001_ID == value.KTX0001_ID);
+                    var checkphong = db.KTX0001.Where(p => p.KTX0001_ID == value.KTX0001_ID||p.ten==value.ghichu).FirstOrDefault();
                     if (checkphong != null)
                     {
                         var checkmakhoa = db.KTX0003.SingleOrDefault(p => p.MaKhoa == value.MaKhoa&&value.MaKhoa!=null);
                         if (checkmakhoa == null)
                         {
-                            KTX0003 k = new KTX0003() { KTX0001_ID = value.KTX0001_ID, ghichu = value.ghichu, MaKhoa = value.MaKhoa, SoTu = value.SoTu, trangthai = value.trangthai, type = value.type };
+                            KTX0003 k = new KTX0003() { KTX0001_ID = checkphong.KTX0001_ID, ghichu = value.ghichu, MaKhoa = value.MaKhoa, SoTu = value.SoTu, trangthai = value.trangthai, type = value.type };
                             db.KTX0003.Add(k);
                             try
                             {
@@ -180,7 +181,9 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                         }
                     }
                     else
+                    {
                         rel.set("NaN", value, "Thất bại: Không tìm thấy thông tin phòng.");
+                    }
                     list.add(rel);
                 }
                 return  list.ToHttpResponseMessage();
