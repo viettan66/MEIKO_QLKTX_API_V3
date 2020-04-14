@@ -30,6 +30,25 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 return REST.GetHttpResponseMessFromObject(data.ToList());
             }
         }
+        [Route("Getid/{id}")]
+        [HttpGet]
+        public HttpResponseMessage Getid(int id)
+        {
+            using (DB db = new DB())
+            {
+                var data = db.RM0004.Where(p => p.RM0004_ID == id).Select(p => new
+                {
+                    p.ghiChu,
+                    p.maChuyenNganh,
+                    p.RM0004_ID,
+                    p.RM0002_ID,
+                    p.tenChuyenNganh,
+                    p.thuTu,
+                    p.tinhTrang
+                }).FirstOrDefault();
+                return REST.GetHttpResponseMessFromObject(data);
+            }
+        }
         [Route("update")]
         [HttpPut]
         public HttpResponseMessage update([FromBody]RM0004 value)

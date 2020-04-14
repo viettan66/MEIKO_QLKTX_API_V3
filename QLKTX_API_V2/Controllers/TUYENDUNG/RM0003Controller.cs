@@ -29,6 +29,24 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 return REST.GetHttpResponseMessFromObject(data.ToList());
             }
         }
+        [Route("Getid/{id}")]
+        [HttpGet]
+        public HttpResponseMessage Getid(int id)
+        {
+            using (DB db = new DB())
+            {
+                var data = db.RM0003.Where(p => p.RM0003_ID == id).Select(p => new
+                {
+                    p.ghiChu,
+                    p.maBacDaoTao,
+                    p.RM0003_ID,
+                    p.tenBacDaoTao,
+                    p.thuTu,
+                    p.tinhTrang
+                }).FirstOrDefault();
+                return REST.GetHttpResponseMessFromObject(data);
+            }
+        }
         [Route("update")]
         [HttpPut]
         public HttpResponseMessage update([FromBody]RM0003 value)
@@ -60,7 +78,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         }
         [Route("delete")]
         [HttpPut]
-        public HttpResponseMessage update([FromBody]RM0003[] values)
+        public HttpResponseMessage delete([FromBody]RM0003[] values)
         {
             using (DB db = new DB())
             {

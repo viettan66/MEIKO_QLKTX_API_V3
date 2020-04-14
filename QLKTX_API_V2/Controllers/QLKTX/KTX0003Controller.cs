@@ -44,7 +44,7 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                                                k.type
                                            }),
                                 KTX0020 = (from k in db.KTX0020
-                                           where k.sokhoatu == temp.MaKhoa && k.trangthai2 != true
+                                           where k.KTX0003_ID == temp.KTX0003_ID && k.trangthai2 != true
                                            select new
                                            {
                                                k.KTX0020_ID,

@@ -52,6 +52,10 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Interop.zkemkeeper">
+      <HintPath>C:\Users\Administrator\Downloads\Standalone SDK (1)\Demo-Ver1.1.14\standalonesdkdemo\bin\x64\Release\Interop.zkemkeeper.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.AspNetCore.Authentication.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNetCore.Authentication.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Abstractions.dll</HintPath>
     </Reference>
@@ -289,11 +293,17 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountGett.cs" />
     <Compile Include="Controllers\ADMIN\CommandController.cs" />
+    <Compile Include="Controllers\ADMIN\FingerPrintsController.cs" />
     <Compile Include="Controllers\ADMIN\GetMKV9998.cs" />
     <Compile Include="Controllers\ADMIN\MKV8001Controller.cs" />
+    <Compile Include="Controllers\ADMIN\MKV8002Controller.cs" />
     <Compile Include="Controllers\ADMIN\MKV9981Controller.cs" />
     <Compile Include="Controllers\ADMIN\MKV9998Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MESSAGE\MessageManager.cs" />
+    <Compile Include="Controllers\MESSAGE\MKV7000Controller.cs" />
+    <Compile Include="Controllers\MESSAGE\MKV7001Controller.cs" />
+    <Compile Include="Controllers\MESSAGE\MKV7002Controller.cs" />
     <Compile Include="Controllers\PermistionController.cs" />
     <Compile Include="Controllers\QLKTX\KTX0001Controller.cs" />
     <Compile Include="Controllers\QLKTX\KTX0002Controller.cs" />
@@ -428,6 +438,30 @@
     <Compile Include="Migrations\202004090345382_mydb090402.cs" />
     <Compile Include="Migrations\202004090345382_mydb090402.designer.cs">
       <DependentUpon>202004090345382_mydb090402.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004110852158_mydb110401.cs" />
+    <Compile Include="Migrations\202004110852158_mydb110401.designer.cs">
+      <DependentUpon>202004110852158_mydb110401.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130612260_mydb120401.cs" />
+    <Compile Include="Migrations\202004130612260_mydb120401.designer.cs">
+      <DependentUpon>202004130612260_mydb120401.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130637089_mydb120403.cs" />
+    <Compile Include="Migrations\202004130637089_mydb120403.designer.cs">
+      <DependentUpon>202004130637089_mydb120403.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130650287_mydb1204034.cs" />
+    <Compile Include="Migrations\202004130650287_mydb1204034.designer.cs">
+      <DependentUpon>202004130650287_mydb1204034.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130703333_mydb12040340.cs" />
+    <Compile Include="Migrations\202004130703333_mydb12040340.designer.cs">
+      <DependentUpon>202004130703333_mydb12040340.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202004130708320_mydb12040345.cs" />
+    <Compile Include="Migrations\202004130708320_mydb12040345.designer.cs">
+      <DependentUpon>202004130708320_mydb12040345.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DB.cs" />
@@ -600,10 +634,66 @@
     <EmbeddedResource Include="Migrations\202004090345382_mydb090402.resx">
       <DependentUpon>202004090345382_mydb090402.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004110852158_mydb110401.resx">
+      <DependentUpon>202004110852158_mydb110401.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130612260_mydb120401.resx">
+      <DependentUpon>202004130612260_mydb120401.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130637089_mydb120403.resx">
+      <DependentUpon>202004130637089_mydb120403.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130650287_mydb1204034.resx">
+      <DependentUpon>202004130650287_mydb1204034.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130703333_mydb12040340.resx">
+      <DependentUpon>202004130703333_mydb12040340.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004130708320_mydb12040345.resx">
+      <DependentUpon>202004130708320_mydb12040345.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

@@ -47,6 +47,10 @@ namespace MEIKO_QLKTX_API_V1.Models
         public DbSet<MKV9983> MKV9983 { get; set; }
         public DbSet<MKV9984> MKV9984 { get; set; }
         public DbSet<MKV8001> MKV8001 { get; set; }
+        public DbSet<MKV8002> MKV8002 { get; set; }
+        public DbSet<MKV7000> MKV7000 { get; set; }
+        public DbSet<MKV7001> MKV7001 { get; set; }
+        public DbSet<MKV7002> MKV7002 { get; set; }
 
         public DbSet<KTX0020> KTX0020 { get; set; }
         public DbSet<KTX0021> KTX0021 { get; set; }
@@ -493,17 +497,86 @@ namespace MEIKO_QLKTX_API_V1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int KTX0040_ID { get; set; }
         [MaxLength(250)]
-        public string tieude{ get; set; }
-        public string image{ get; set; }
-        public string noidung{ get; set; }
-        public string ghichu{ get; set; }
-        public Nullable<bool> trangthai{ get; set; }
-        public Nullable<int> thutu{ get; set; }
+        public string tieude { get; set; }
+        public string image { get; set; }
+        public string noidung { get; set; }
+        public string ghichu { get; set; }
+        public Nullable<bool> trangthai { get; set; }
+        public Nullable<int> thutu { get; set; }
     }
-        /// <summary>
-        /// Đây là bảng "Tài khoản"
-        /// </summary>
-        [Table("MKV9999")]//Tài khoản DDDDDD
+    /// <summary>
+    /// Đây là bảng "FINGERPRINT"
+    /// </summary>
+    [Table("MKV8002")]
+    public class MKV8002
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MKV8002_ID { get; set; }
+        [MaxLength(250)]
+        public string ten { get; set; }
+        public string ip { get; set; }
+        public string port { get; set; }
+        public string commkey { get; set; }
+        public string ghiChu { get; set; }
+        public Nullable<bool> trangthai { get; set; }
+        public Nullable<int> thutu { get; set; }
+        public Nullable<int> type { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "room Tin nhắn"
+    /// </summary>
+    [Table("MKV7000")]
+    public class MKV7000
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MKV7000_ID { get; set; }
+        [MaxLength(250)]
+        public string ten { get; set; }
+        public Nullable<int> type { get; set; }
+        public Nullable<bool> trangthai { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "Tin nhắn"
+    /// </summary>
+    [Table("MKV7001")]
+    public class MKV7001
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MKV7001_ID { get; set; }
+        public Nullable<int> MKV7000_ID { get; set; }
+        public Nullable<int> MKV9999_ID { get; set; }
+        public Nullable<int> MKV9999_ID2 { get; set; }
+        [MaxLength(250)]
+        public string tieuDe { get; set; }
+        public string noiDung { get; set; }
+        public string ghiChu { get; set; }
+        public Nullable<bool> trangthai { get; set; }
+        public Nullable<int> type { get; set; }
+        public Nullable<DateTime> date { get; set; }
+        public virtual MKV7000 MKV7000{ get; set; }
+        public virtual MKV9999 MKV9999{ get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "phân quyền room tin nhắn"
+    /// </summary>
+    [Table("MKV7002")]
+    public class MKV7002
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int MKV7002_ID { get; set; }
+        public int MKV7000_ID { get; set; }
+        public int MKV9999_ID { get; set; }
+        public virtual MKV7000 MKV7000{ get; set; }
+        public virtual MKV9999 MKV9999{ get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "Tài khoản"
+    /// </summary>
+    [Table("MKV9999")]//Tài khoản DDDDDD
     public class MKV9999
     {
         [Key]

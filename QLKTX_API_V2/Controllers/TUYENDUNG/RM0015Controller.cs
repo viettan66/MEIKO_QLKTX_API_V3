@@ -227,7 +227,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.RM0008_ID,
                         p.thoiGianPhongVan,
                     ngayPV= p.thoiGianPhongVan!=null?DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("yyyy-MM-dd"):"",
-                    thoiGianPV=p.thoiGianPhongVan!=null?DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("hh:mm"):"",
+                    thoiGianPV=p.thoiGianPhongVan!=null?DateTime.Parse(p.thoiGianPhongVan.ToString()).ToString("HH:MM"):"",
                     p.trangThai,
                     p.vongPhongVan,
                     RM0008 = db.RM0008.Where(m => m.RM0008_ID == p.RM0008_ID).Select(m => new { m.DiaDiem, m.ghiChu, m.maDiaDiem, m.RM0008_ID }).FirstOrDefault(),

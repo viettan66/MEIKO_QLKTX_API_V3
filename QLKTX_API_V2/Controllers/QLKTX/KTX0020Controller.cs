@@ -726,8 +726,8 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                             hotenkhaisinh = values.hotenkhaisinh,
                             khoaphong = db.KTX0001.Where(p => p.ten == values.ghichu2).Select(p => p.makhoa).FirstOrDefault(),
                             KTX0001_ID = db.KTX0001.Where(p=>p.ten==values.ghichu2).Select(p=>p.KTX0001_ID).FirstOrDefault(),
-                            KTX0002_ID = db.KTX0002.Where(p => p.ten == values.ghichu).Select(p => p.KTX0002_ID).FirstOrDefault(),
-                            KTX0003_ID = db.KTX0003.Where(p => p.MaKhoa == values.sokhoatu).Select(p => p.KTX0003_ID).FirstOrDefault(),
+                            KTX0002_ID = db.KTX0002.Where(p => p.KTX0001_ID== db.KTX0001.Where(pp => pp.ten == values.ghichu2).Select(pp => pp.KTX0001_ID).FirstOrDefault()&&p.trangthai==false).Select(p => p.KTX0002_ID).FirstOrDefault(),
+                            KTX0003_ID = db.KTX0003.Where(p => p.KTX0001_ID == db.KTX0001.Where(pp => pp.ten == values.ghichu2).Select(pp => pp.KTX0001_ID).FirstOrDefault() && p.trangthai == false).Select(p => p.KTX0003_ID).FirstOrDefault(),
                             lamgiodautu14tuoi = values.lamgiodautu14tuoi,
                             lydo = values.lydo,
                             lydodangkyoktx = values.lydodangkyoktx,
@@ -790,7 +790,7 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                                 });
                                 try
                                 {
-                                    db.SaveChanges();
+                                    //db.SaveChanges();
                                 }
                                 catch 
                                 {
@@ -806,8 +806,8 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                         rel.set("ERR", values, "Thất bại: " + rr.Message);
                     }
                     list.add(rel);
-                });
-            return list.ToHttpResponseMessage();
+                }); db.SaveChanges();
+                return list.ToHttpResponseMessage();
             }
         }
     }

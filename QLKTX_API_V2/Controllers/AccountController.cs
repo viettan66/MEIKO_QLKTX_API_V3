@@ -62,7 +62,11 @@ namespace QLKTX_API_V2.Controllers
                 p.thutu,
                 p.chucvu,
                 p.capbac,
-                p.thetu_id,
+                thetu_id=db.MKV9998.Where(o => p.phong_id == o.phong_id).Select(o => o.bophan_ten).FirstOrDefault(),
+                KTX0001 = db.KTX0001.Where(l => l.KTX0001_ID == db.KTX0020.Where(j => j.MKV9999_ID == p.MKV9999_ID && j.trangthai2 != true).Select(j => j.MKV9999_ID).FirstOrDefault()).Select(o => new
+                {
+                    o.capbac,o.ghichu,o.idcha,o.khu,o.KTX0001_ID,o.makhoa,o.slot,o.ten,o.thutu,o.trangthai,o.type
+                })
             }).FirstOrDefault();
 
             return REST.GetHttpResponseMessFromObject(acc);
