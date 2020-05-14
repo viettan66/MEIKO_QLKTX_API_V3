@@ -10,6 +10,7 @@ namespace QLKTX_API_V2.Controllers
     { 
         public struct filter { 
             public Nullable<int> id { get; set; }
+            public string manhansu { get; set; }
         }
         public static object GetAccount(filter filter)
         {
@@ -62,6 +63,10 @@ namespace QLKTX_API_V2.Controllers
                 if (filter.id != null)
                 {
                     return acc.Where(p => p.MKV9999_ID == filter.id).FirstOrDefault();
+                }
+                if (filter.manhansu != null)
+                {
+                    return acc.Where(p => p.manhansu == filter.manhansu).FirstOrDefault();
                 }
                 return acc;
             }

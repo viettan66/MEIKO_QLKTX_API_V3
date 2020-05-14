@@ -154,6 +154,19 @@ namespace QLKTX_API_V2.Controllers
                 return REST.GetHttpResponseMessFromObject(acc);
             }
         }
+        public struct getcmd { 
+            public string cmd { get; set; }
+        }
+        [Route("GetSQL")]
+        [HttpPost]
+        public HttpResponseMessage GetSQL([FromBody] getcmd cmd)
+        {
+            using (DB db = new DB())
+            {
+                var data = db.Database.SqlQuery<MKV9999>(cmd.cmd);
+                return REST.GetHttpResponseMessFromObject(data);
+            }
+        }
         [Route("Update")]
         [HttpPut]
         public HttpResponseMessage Update([FromBody]MKV9999 value)
@@ -174,6 +187,65 @@ namespace QLKTX_API_V2.Controllers
                         rel.set("ERR", value, "Thất bại: " + fd.Message);
                     }
                 }else rel.set("NaN", value, "Thất bại: Không có dữ liệu");
+                return rel.ToHttpResponseMessage();
+            }
+        }
+        [Route("Updateinfo")]
+        [HttpPut]
+        public HttpResponseMessage Updateinfo([FromBody]MKV9999 value)
+        {
+            using (DB db = new DB())
+            {
+                result<object> rel = new result<object>();
+                var check = db.MKV9999.SingleOrDefault(p=>p.MKV9999_ID==value.MKV9999_ID);
+                if (check != null)
+                {
+                    check.manhansu = value.manhansu;
+                    check.id = value.id;
+                    check.hodem = value.hodem;
+                    check.ten = value.ten;
+                    check.type = 1;
+                    check.ngaysinh = value.ngaysinh;
+                    check.gioitinh = value.gioitinh;
+                    check.noisinh = value.noisinh;
+                    check.quequan = value.quequan;
+                    check.diachithuongtru = value.diachithuongtru;
+                    check.diachitamtru = value.diachitamtru;
+                    check.cmtnd_so = value.cmtnd_so;
+                    check.cmtnd_ngayhethan = value.cmtnd_ngayhethan;
+                    check.cmtnd_noicap = value.cmtnd_noicap;
+                    check.hochieu_so = value.hochieu_so;
+                    check.hochieu_ngaycap = value.hochieu_ngaycap;
+                    check.hochieu_ngayhethan = value.hochieu_ngayhethan;
+                    check.ngayvaocongty = value.ngayvaocongty;
+                    check.phong_id = value.phong_id;
+                    check.ban_id = value.ban_id;
+                    check.congdoan_id = value.congdoan_id;
+                    check.chucvu_id = value.chucvu_id;
+                    check.nganhang_stk = value.nganhang_stk;
+                    check.nganhang_id = value.nganhang_id;
+                    check.sosobaohiem = value.sosobaohiem;
+                    check.honnhantinhtrang = value.honnhantinhtrang;
+                    check.datnuoc_id = value.datnuoc_id;
+                    check.phuongxa = value.phuongxa;
+                    check.suckhoetinhtrang = value.suckhoetinhtrang;
+                    check.dienthoai_nharieng = value.dienthoai_nharieng;
+                    check.dienthoai_didong = value.dienthoai_didong;
+                    check.email = value.email;
+                    check.tinhtrangnhansu = value.tinhtrangnhansu;
+                    check.thutu = value.thutu;
+                    check.chucvu = value.chucvu;
+                    check.capbac = value.capbac;
+                    check.thetu_id = value.thetu_id;
+                    try
+                    {
+                        db.SaveChanges();
+                        rel.set("OK",AccountGett.GetAccount(new AccountGett.filter() { id=value.MKV9999_ID}),"Thành công");
+                    }catch(Exception fd)
+                    {
+                        rel.set("ERR", null, "Thất bại: " + fd.Message);
+                    }
+                }else rel.set("NaN", null, "Thất bại: Không có dữ liệu");
                 return rel.ToHttpResponseMessage();
             }
         }

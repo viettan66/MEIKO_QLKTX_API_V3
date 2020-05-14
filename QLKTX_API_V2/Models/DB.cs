@@ -21,6 +21,8 @@ namespace MEIKO_QLKTX_API_V1.Models
     {
         public DB() : base("DefaultConnection")
         {
+            //var initializer = new MigrateDatabaseToLatestVersion<DB, QLKTX_API_V2.Migrations.Configuration>();
+            //Database.SetInitializer(initializer);
 
         }
         //protected override void OnConfiguring()
@@ -59,6 +61,10 @@ namespace MEIKO_QLKTX_API_V1.Models
         public DbSet<MKV8000> KTX8000 { get; set; }
 
         public DbSet<KTX0040> KTX0040 { get; set; }
+        public DbSet<KTX0050> KTX0050 { get; set; }
+        public DbSet<KTX0052> KTX0052 { get; set; }
+        public DbSet<KTX0053> KTX0053 { get; set; }
+        public DbSet<KTX0049> KTX0049 { get; set; }
 
 
         public DbSet<RM0001> RM0001 { get; set; }
@@ -81,6 +87,9 @@ namespace MEIKO_QLKTX_API_V1.Models
         public DbSet<RM0015A> RM0015A { get; set; }
         public DbSet<RM0013> RM0013 { get; set; }
         public DbSet<RM0007> RM0007 { get; set; }
+        public DbSet<A0028> A0028 { get; set; }
+        public DbSet<A0028E> A0028E { get; set; }
+        public DbSet<A0028D> A0028D { get; set; }
     }
     /// <summary>
     /// Đây là lớp khởi tạo Database và Insert dữ liệu
@@ -503,6 +512,89 @@ namespace MEIKO_QLKTX_API_V1.Models
         public string ghichu { get; set; }
         public Nullable<bool> trangthai { get; set; }
         public Nullable<int> thutu { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "Thông tin KTX"
+    /// </summary>
+    [Table("KTX0049 ")]
+    public class KTX0049
+    {
+        [Key]
+        public string User_ID { get; set; }
+        public  Nullable<DateTime> startdate { get; set; }
+        public Nullable< DateTime> enddate { get; set; }
+        public Nullable< bool> trangthai { get; set; }
+        public Nullable< float> thanhtoan { get; set; }
+        public string ghichu { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "Thông tin KTX"
+    /// </summary>
+    [Table("KTX0050 ")]
+    public class KTX0050
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int KTX0050_ID { get; set; }
+        [MaxLength(50)]
+        public string User_ID { get; set; }
+        public Nullable<DateTime> Verify_Date { get; set; }
+        public Nullable<int> Verify_Type { get; set; }
+        public Nullable<int> Verify_State { get; set; }
+        public Nullable<int> WorkCode { get; set; }
+        [MaxLength(250)]
+        public string sSN { get; set; }
+        [MaxLength(250)]
+        public string ip { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "nhân viên ăn"
+    /// </summary>
+    [Table("KTX0052 ")]
+    public class KTX0052
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int KTX0052_ID { get; set; }
+        [MaxLength(50)]
+        public string User_ID { get; set; }
+        [MaxLength(50)]
+        public string manhansu { get; set; }
+        [MaxLength(50)]
+        public string hodem { get; set; }
+        [MaxLength(50)]
+        public string ten { get; set; }
+        public Nullable<DateTime> ngaysinh { get; set; }
+        public Nullable<bool> gioitinh { get; set; }
+        [MaxLength(50)]
+        public string cmtnd_so { get; set; }
+        public Nullable<DateTime> cmtnd_ngayhethan { get; set; }
+        public string cmtnd_noicap { get; set; }
+        [MaxLength(100)]
+        public string phong_id { get; set; }
+        [MaxLength(50)]
+        public string dienthoai_didong { get; set; }
+        [MaxLength(50)]
+        public string chucvu { get; set; }
+        [MaxLength(50)]
+        public string capbac { get; set; }
+        public string thetu_id { get; set; }
+
+    }
+    /// <summary>
+    /// Đây là bảng "mốc thời gian tính giá tiền"
+    /// </summary>
+    [Table("KTX0053 ")]
+    public class KTX0053
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int KTX0053_ID { get; set; }
+        public Nullable<DateTime> ngay { get; set; }
+        public Nullable<float> buasang { get; set; }
+        public Nullable<float> buatrua { get; set; }
+        public Nullable<float> buatoi { get; set; }
+
     }
     /// <summary>
     /// Đây là bảng "FINGERPRINT"

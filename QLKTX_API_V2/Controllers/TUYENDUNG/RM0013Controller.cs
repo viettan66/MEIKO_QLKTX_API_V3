@@ -116,6 +116,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     }
                    
                 }
+                return ;
             }
         }
     }

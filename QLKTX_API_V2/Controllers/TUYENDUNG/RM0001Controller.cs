@@ -11,6 +11,39 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
     [RoutePrefix("api/RM0001")]
     public class RM0001Controller : ApiController
     {
+
+        [Route("delete")]
+        [HttpPut]
+        public HttpResponseMessage delete([FromBody]RM0001[] values)
+        {
+            using (DB db = new DB())
+            {
+                results<RM0001> list = new results<RM0001>();
+                values.ToList().ForEach(value =>
+                {
+                    result<RM0001> rel = new result<RM0001>();
+                    var check = db.RM0001.SingleOrDefault(p => p.RM0001_ID == value.RM0001_ID);
+                    if (check != null)
+                    {
+                        db.RM0001.Remove(check);
+                        try
+                        {
+                            db.SaveChanges();
+                            rel.set("OK", value, "Thành công");
+                        }
+                        catch (Exception l)
+                        {
+                            rel.set("ERR", value, "Thất bại:" + l.Message);
+                        }
+
+                    }
+                    else
+                        rel.set("NaN", null, "Thành công");
+                    list.add(rel);
+                });
+                return list.ToHttpResponseMessage();
+            }
+        }
         [Route("Getall")]
         [HttpGet]
         public HttpResponseMessage Getall()
@@ -38,6 +71,29 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
             using (DB db = new DB())
             {
                 var data = db.RM0001.Where(p=>p.RM0001_ID==id).Select(p => new
+                {
+                    p.ghiChu,
+                    p.maCongViec,
+                    p.moTa,
+                    p.RM0001_ID,
+                    p.RM0004_ID,
+                    p.tenCongViec,
+                    p.thuTu,
+                    p.tinhTrang
+                }).FirstOrDefault();
+                return REST.GetHttpResponseMessFromObject(data);
+            }
+        }
+        [Route("GetidA0028/{sophieu}")]
+        [HttpGet]
+        public HttpResponseMessage GetidA0028(int sophieu=0)
+        {
+
+            using (DB db = new DB())
+            {
+                var r = db.A0028.Where(f => f.sophieu == sophieu).Select(f => f.T005C).FirstOrDefault();
+                int kk = r != null ? int.Parse(r) : 0;
+                var data = db.RM0001.Where(p=>p.RM0001_ID==kk).Select(p => new
                 {
                     p.ghiChu,
                     p.maCongViec,

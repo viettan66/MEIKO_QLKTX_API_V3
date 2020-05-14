@@ -6,45 +6,72 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using MEIKO_QLKTX_API_V1.Models;
+using QLKTX_API_V2.Controllers.ADMIN;
+using static QLKTX_API_V2.Controllers.ADMIN.FingerPrintData;
 
 namespace QLKTX_API_V2.Controllers.QLKTX
 {
     [RoutePrefix("api/FingerPrints")]
     public class FingerPrintsController : ApiController
     {
-            SDKHelper SDK = new SDKHelper();
-        public struct filter
-        {
-            public string ip { get; set; }
-            public string port { get; set; }
-            public string commkey { get; set; }
-            public string startdate { get; set; }
-            public string enddate { get; set; }
-        }
+        SDKHelper SDK = new SDKHelper();
         [Route("Getdata")]
+        [HttpPost] 
+        public HttpResponseMessage Getdata([FromBody] filter filter)
+        {
+           return REST.GetHttpResponseMessFromObject( FingerPrintData.Getdata(filter));
+        }
+        [Route("Deletedata")]
         [HttpPost]
-        public HttpResponseMessage Getdata(filter filter)
+        public HttpResponseMessage Deletedata([FromBody]filter filter)
         {
             if (filter.startdate == null || filter.enddate == null) return null;
-            HttpResponseMessage d=new HttpResponseMessage();
+            HttpResponseMessage d = new HttpResponseMessage();
             string lbSysOutputInfo = "";
-
             int ret = SDK.sta_ConnectTCP(ref lbSysOutputInfo, filter.ip, filter.port, filter.commkey);
             if (ret == 1)
             {
-                DataTable dt = new DataTable();
-                dt.Columns.Add("STT");
-                dt.Columns.Add("User_ID");
-                dt.Columns.Add("Verify_Date");
-                dt.Columns.Add("Verify_Type");
-                dt.Columns.Add("Verify_State");
-                dt.Columns.Add("WorkCode");
-                SDK.sta_readLogByPeriod(ref lbSysOutputInfo,ref dt, filter.startdate, filter.enddate);
-                
-                 d = REST.GetHttpResponseMessFromObject(dt);
-                SDK.sta_ConnectTCP(ref lbSysOutputInfo, filter.ip, filter.port, filter.commkey);
+                ret = SDK.sta_DeleteAttLogByPeriod(ref lbSysOutputInfo, filter.startdate, filter.enddate);
+                d = REST.GetHttpResponseMessFromObject(ret == 1 ? "1" : lbSysOutputInfo);
+                ret = SDK.sta_ConnectTCP(ref lbSysOutputInfo, filter.ip, filter.port, filter.commkey);
             }
             return d;
+        }
+        public struct datasync
+        {
+            public Nullable<int> type { get; set; }
+            
+            public KTX0050[] KTX0050 { get; set; }
+        }
+        [Route("Syncdata")]
+        [HttpPost]
+        public HttpResponseMessage Syncdata([FromBody]datasync datas)
+        {
+            using (DB db = new DB())
+            {
+                result<object> rel = new result<object>();
+                if (datas.type == 1)
+                {
+                    datas.KTX0050.ToList().ForEach(value =>
+                    {
+                        var check = db.KTX0050.Where(p => p.ip == value.ip && p.sSN == value.sSN && p.User_ID == value.User_ID && p.Verify_Date == value.Verify_Date && p.Verify_Type == value.Verify_Type).FirstOrDefault();
+                        if (check == null)
+                        {
+                            db.KTX0050.Add(value);
+                        }
+                    });
+                    try
+                    {
+                        db.SaveChanges();
+                        rel.set("OK", datas.KTX0050);
+                    }catch(Exception f)
+                    {
+                        rel.set("ERR", datas.KTX0050,"Thất bại: "+f.Message);
+                    }
+                }
+
+                return rel.ToHttpResponseMessage();
+            }
         }
     }
 
@@ -1425,7 +1452,7 @@ namespace QLKTX_API_V2.Controllers.QLKTX
             return ret;
         }
 
-        public int sta_readLogByPeriod(ref string lblOutputInfo,ref DataTable dt_logPeriod, string fromTime, string toTime)
+        public int sta_readLogByPeriod(ref string lblOutputInfo,ref DataTable dt_logPeriod, string fromTime, string toTime,string ip, List<KTX0050> list=null )
         {
             if (GetConnectState() == false)
             {
@@ -1450,19 +1477,51 @@ namespace QLKTX_API_V2.Controllers.QLKTX
 
 
             if (axCZKEM1.ReadTimeGLogData(GetMachineNumber(), fromTime, toTime))
-            {
+            {//ref string lblOutputInfo, out string sFirmver, out string sMac, out string sPlatform, out string sSN, out string sProductTime,
+                //out string sDeviceName, out int iFPAlg, out int iFaceAlg, out string sProducter
+               // string lblOutputInfo;
+                string sFirmver;
+                string sMac;
+                string sPlatform;
+                string sSN;
+                string sProductTime;
+                string sDeviceName;
+                int iFPAlg;
+                int iFaceAlg;
+                string sProducter;
+                sta_GetDeviceInfo(ref lblOutputInfo, out sFirmver, out sMac, out sPlatform, out sSN, out sProductTime,
+                out sDeviceName, out iFPAlg, out iFaceAlg, out sProducter);
                 int i = 1;
                 while (axCZKEM1.SSR_GetGeneralLogData(GetMachineNumber(), out sdwEnrollNumber, out idwVerifyMode,
                             out idwInOutMode, out idwYear, out idwMonth, out idwDay, out idwHour, out idwMinute, out idwSecond, ref idwWorkcode))//get records from the memory
                 {
-                    DataRow dr = dt_logPeriod.NewRow();
-                    dr["STT"] = i++;
-                    dr["User_ID"] = sdwEnrollNumber;
-                    dr["Verify_Date"] = idwYear + "-" + idwMonth + "-" + idwDay + " " + idwHour + ":" + idwMinute + ":" + idwSecond;
-                    dr["Verify_Type"] = idwVerifyMode;
-                    dr["Verify_State"] = idwInOutMode;
-                    dr["WorkCode"] = idwWorkcode;
-                    dt_logPeriod.Rows.Add(dr);
+                    if (list == null)
+                    {
+                        DataRow dr = dt_logPeriod.NewRow();
+                        dr["STT"] = i++;
+                        dr["User_ID"] = sdwEnrollNumber;
+                        dr["Verify_Date"] = idwYear + "-" + idwMonth + "-" + idwDay + " " + idwHour + ":" + idwMinute + ":" + idwSecond;
+                        dr["Verify_Type"] = idwVerifyMode;
+                        dr["Verify_State"] = idwInOutMode;
+                        dr["WorkCode"] = idwWorkcode;
+                        dr["sDeviceName"] = sDeviceName;
+                        dr["sSN"] = sSN;
+                        dr["ip"] = ip;
+                        dt_logPeriod.Rows.Add(dr);
+                    }
+                    else
+                    {
+                        list.Add(new KTX0050()
+                        {
+                            ip=ip,
+                            sSN=sSN,
+                            User_ID=sdwEnrollNumber,
+                            Verify_Date=DateTime.Parse( idwYear + "-" + idwMonth + "-" + idwDay + " " + idwHour + ":" + idwMinute + ":" + idwSecond),
+                            Verify_State=idwInOutMode,
+                            Verify_Type=idwVerifyMode,
+                            WorkCode=idwWorkcode,
+                        });
+                    }
                 }
                 ret = 1;
             }

@@ -26,7 +26,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     try
                     {
                         db.SaveChanges();
-                        rel.set("OK", RM0007Get( new filter() { RM0007_ID = value.RM0007_ID }));
+                        rel.set("OK", RM0007Get(new filter() { RM0007_ID = value.RM0007_ID }));
                     }
                     catch (Exception fd)
                     {
@@ -46,6 +46,30 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         rel.set("ERR", null, "Thất bại: " + fd.Message);
                     }
 
+                }
+                return rel.ToHttpResponseMessage();
+            }
+        }
+        [Route("add2")]
+        [HttpPost]
+        public HttpResponseMessage add2([FromBody]RM0007 value)
+        {
+            using (DB db = new DB())
+            {
+                result<object> rel = new result<object>();
+                var check = db.RM0007.SingleOrDefault(p => p.MKV9999_ID == value.MKV9999_ID&&p.RM0006_ID==value.RM0006_ID);
+                if (check == null)
+                {
+                    db.RM0007.Add(value);
+                    try
+                    {
+                        db.SaveChanges();
+                        rel.set("OK", RM0007Get(new filter() { RM0007_ID = value.RM0007_ID }));
+                    }
+                    catch (Exception fd)
+                    {
+                        rel.set("ERR", null, "Thất bại: " + fd.Message);
+                    }
                 }
                 return rel.ToHttpResponseMessage();
             }

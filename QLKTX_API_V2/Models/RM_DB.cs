@@ -179,8 +179,8 @@ namespace MEIKO_QLKTX_API_V1.Models
         public string EMAIL { get; set; }
         public string THUONGTRU { get; set; }
         public string TAMTRU { get; set; }
-        public int RM0001_ID { get; set; }
-        public int RM0001_ID2 { get; set; }
+        public Nullable<int> RM0001_ID { get; set; }
+        public Nullable<int> RM0001_ID2 { get; set; }
         public Nullable<System.DateTime> NGAYCOTHELAM { get; set; }
         public Nullable<double> THUNHAPMONGMUON { get; set; }
         public Nullable<bool> COTHELAMTHEM { get; set; }
@@ -203,8 +203,10 @@ namespace MEIKO_QLKTX_API_V1.Models
         public string DUDINHHOCTIEPCHUYENNGANH { get; set; }
         public Nullable<bool> DUDINHHOCTIEP { get; set; }
         public string bophanid { get; set; }
+        public string A0028_ID { get; set; }
+        public string ghichu { get; set; }
+        public Nullable<int> sophieu { get; set; }
 
-        public virtual RM0001 RM0001 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RM0080> RM0080 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -362,6 +364,9 @@ namespace MEIKO_QLKTX_API_V1.Models
         public int RM0008_ID { get; set; }
         public Nullable<DateTime> thoiGianPhongVan { get; set; }
         public string ghiChu { get; set; }
+        public string kqChung { get; set; }
+        public string ngoaingu { get; set; }
+        public string IQ { get; set; }
         public Nullable<bool> trangThai { get; set; }
         public Nullable<bool> ketQua { get; set; }
         public Nullable<int> vongPhongVan { get; set; }
@@ -423,6 +428,122 @@ namespace MEIKO_QLKTX_API_V1.Models
         public virtual RM0006 RM0006 { get; set; }
 
 
+    }
+    /// <summary>
+    /// Đây là bảng "yêu cầu tuyển dụng", .
+    /// </summary>
+    [Table("A0028")]
+    public class A0028
+    {
+        [Key]
+        public string A0028_ID { get; set; }
+        public string A0002_ID { get; set; }
+        public string hoVaTen { get; set; }
+        public string A0016_ID { get; set; }
+        public string A0022_ID { get; set; }
+        public string A0032_ID { get; set; }
+        public string maForm { get; set; }
+        public Nullable<int> trangThai { get; set; }
+        public Nullable<int> sophieu { get; set; }
+        public string ngayTao { get; set; }
+        public string noiDungCongViec { get; set; }
+        public Nullable<bool> daXoa { get; set; }
+        public Nullable<int> tinhtrang { get; set; }
+        public string T001C { get; set; }
+        public string T002C { get; set; }
+        public string T003C { get; set; }
+        public string T004C { get; set; }
+        public string T005C { get; set; }
+        public string T006C { get; set; }
+        public string T007C { get; set; }
+        public string T008C { get; set; }
+        public string T009C { get; set; }
+        public string T010C { get; set; }
+        public string T011C { get; set; }
+        public string T012C { get; set; }
+        public string T013C { get; set; }
+        public string T014C { get; set; }
+        public string T015C { get; set; }
+        public string T016C { get; set; }
+        public string T017C { get; set; }
+        public string T018C { get; set; }
+        public string T019C { get; set; }
+        public string T020C { get; set; }
+        public string T021C { get; set; }
+        public string T022C { get; set; }
+        public string T023C { get; set; }
+        public string T024C { get; set; }
+        public string T025C { get; set; }
+        public string T026C { get; set; }
+        public string T027C { get; set; }
+        public string T028C { get; set; }
+        public string T029C { get; set; }
+        public string T030C { get; set; }
+        public string T097C { get; set; }
+        public string T098C { get; set; }
+        public string T099C { get; set; }
+        public string T100C { get; set; }
+        public Nullable<DateTime> thoigian { get; set; }
+        public Nullable<int> RM0008_ID { get; set; }
+        public virtual  A0028D A0028D { get; set; }
+        public virtual ICollection<A0028E> A0028E { get; set; }
+    }
+    /// <summary>
+    /// Đây là bảng "nguoiphongvan", .
+    /// </summary>
+    [Table("A0028E")]
+    public class A0028E
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int A0028E_ID { get; set; }
+        public int MKV9999_ID { get; set; }
+        public string A0028_ID { get; set; }
+    }
+        /// <summary>
+        /// Đây là bảng "yêu cầu tuyển dụng", .
+        /// </summary>
+        [Table("A0028D")]
+    public class A0028D
+    {
+        [Key]
+        public string A0028D_ID { get; set; }
+    public string A0028_ID { get; set; }
+    public Nullable<int>  IsPostion{ get; set; }
+    public string C001C { get; set; }
+    public string C002C { get; set; }
+    public string C003C { get; set; }
+    public string C004C { get; set; }
+    public string C005C { get; set; }
+    public string C006C { get; set; }
+    public string C007C { get; set; }
+    public string C008C { get; set; }
+    public string C009C { get; set; }
+    public string C010C { get; set; }
+    public string C011C { get; set; }
+    public string C012C { get; set; }
+    public string C013C { get; set; }
+    public string C014C { get; set; }
+    public string C015C { get; set; }
+    public string C016C { get; set; }
+    public string C017C { get; set; }
+    public string C018C { get; set; }
+    public string C019C { get; set; }
+    public string C020C { get; set; }
+    public string C021C { get; set; }
+    public string C022C { get; set; }
+    public string C023C { get; set; }
+    public string C024C { get; set; }
+    public string C025C { get; set; }
+    public string C026C { get; set; }
+    public string C027C { get; set; }
+    public string C028C { get; set; }
+    public string C029C { get; set; }
+    public string C030C { get; set; }
+    public string T097C { get; set; }
+    public string T098C { get; set; }
+    public string T099C { get; set; }
+    public string T100C { get; set; }
     }
 }
 

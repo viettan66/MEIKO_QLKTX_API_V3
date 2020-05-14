@@ -62,7 +62,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                             trangThai = false,
                             RM0008_ID = values.diadiem,
                             vongPhongVan = db.RM0015.Where(p => p.RM0010_ID == value.RM0010_ID).Count() + 1,
-                            ghiChu = "Thời gian tạo lịch hẹn" + DateTime.Now,
+                            //ghiChu = "Thời gian tạo lịch hẹn" + DateTime.Now,
+                            
                         };
                         db.RM0015.Add(rm0015);
                         try
@@ -76,9 +77,26 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                                     RM0015_ID=rm0015.RM0015_ID,
                                 };
                                 db.RM0015A.Add(temp) ;
+                                db.RM0006.Where(lk=>lk.maTieuChiDG!="NS").ToList().ForEach(val=>
+                            {
+                                var check3 = db.RM0007.SingleOrDefault(p => p.MKV9999_ID == mkv9999.MKV9999_ID && val.RM0006_ID == p.RM0006_ID);
+                                if (check3 == null)
+                                {
+                                    db.RM0007.Add(new RM0007() { MKV9999_ID=mkv9999.MKV9999_ID,RM0006_ID=val.RM0006_ID,trangThai=true});
+                                    try
+                                    {
+                                        db.SaveChanges();
+                                    }
+                                    catch (Exception fd)
+                                    {
+                                        rel.set("ERR", null, "Thất bại: " + fd.Message);
+                                    }
+                                }
+                            });
                             });
                             check.trangthai = false;
                             db.SaveChanges();
+                            
                             rel.set("OK", getallRM0015(new filter() { id = rm0015.RM0015_ID }),"Thành công.");
                         }catch(Exception tr)
                         {
@@ -113,6 +131,9 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     check.thoiGianPhongVan = values.thoiGianPhongVan;
                     check.trangThai = values.trangThai;
                     check.vongPhongVan = values.vongPhongVan;
+                    check.kqChung = values.kqChung;
+                    check.ngoaingu = values.ngoaingu;
+                    check.IQ = values.IQ;
                     try
                     {
                         db.SaveChanges();
@@ -210,6 +231,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         {
             public Nullable<int> id { get; set; }
             public Nullable<int> MKV9999_ID { get; set; }
+            public string A0028_ID { get; set; }
             public string phong_id { get; set; }
             public Nullable<bool> type { get; set; }
             public Nullable<bool> trangthai { get; set; }
@@ -221,6 +243,9 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 var data = db.RM0015.AsEnumerable().Select(p => new
                 {
                     p.ghiChu,
+                    p.kqChung,
+                    p.ngoaingu,
+                    p.IQ,
                     p.ketQua,
                     p.RM0010_ID,
                     p.RM0015_ID,
@@ -339,7 +364,11 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 }
                 if (filter.MKV9999_ID != null)
                 {
-                    data= data.Where(p =>db.RM0015A.Where(j=>j.MKV9999_ID==filter.MKV9999_ID).Select(j=>j.RM0015_ID).Distinct().Contains(p.RM0015_ID )).ToList();
+                    data = data.Where(p => db.RM0015A.Where(j => j.MKV9999_ID == filter.MKV9999_ID).Select(j => j.RM0015_ID).Distinct().Contains(p.RM0015_ID)).ToList();
+                }
+                if (filter.A0028_ID != null)
+                {
+                    data = data.Where(p => db.RM0010.Where(j => j.A0028_ID == filter.A0028_ID).Select(j => j.RM0010_ID).Distinct().Contains(p.RM0010_ID)).ToList();
                 }
                 if (filter.phong_id != null)
                 {

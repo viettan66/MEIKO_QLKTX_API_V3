@@ -115,7 +115,7 @@ namespace QLKTX_API_V2.Controllers
                 try
                 {
                     db.SaveChanges();
-                    rel.set("OK", p, "Thành  công");
+                    rel.set("OK", p, "them Thành  công");
                 }
                 catch (Exception d)
                 {
@@ -129,7 +129,7 @@ namespace QLKTX_API_V2.Controllers
                 try
                 {
                     db.SaveChanges();
-                    rel.set("OK", check, "Thành  công");
+                    rel.set("OK", check, "xoas Thành  công");
                 }
                 catch (Exception d)
                 {
@@ -144,7 +144,48 @@ namespace QLKTX_API_V2.Controllers
         public HttpResponseMessage GetAllUserOfGroup(int mkv9983_id)
         {
             DB db = new DB();
-            var re = from l in db.MKV9999 where (from temp in db.MKV9984 where temp.MKV9983_ID == mkv9983_id select temp.MKV9999_ID).Contains(l.MKV9999_ID) select l;
+            var re = from p in db.MKV9999 where (from temp in db.MKV9984 where temp.MKV9983_ID == mkv9983_id select temp.MKV9999_ID).Contains(p.MKV9999_ID) select new
+            {
+                p.MKV9999_ID,
+                p.manhansu,
+                p.matkhau,
+                p.id,
+                p.hodem,
+                p.ten,
+                p.type,
+                p.ngaysinh,
+                p.gioitinh,
+                p.noisinh,
+                p.quequan,
+                p.diachithuongtru,
+                p.diachitamtru,
+                p.cmtnd_so,
+                p.cmtnd_ngayhethan,
+                p.cmtnd_noicap,
+                p.hochieu_so,
+                p.hochieu_ngaycap,
+                p.hochieu_ngayhethan,
+                p.ngayvaocongty,
+                p.phong_id,
+                p.ban_id,
+                p.congdoan_id,
+                p.chucvu_id,
+                p.nganhang_stk,
+                p.nganhang_id,
+                p.sosobaohiem,
+                p.honnhantinhtrang,
+                p.datnuoc_id,
+                p.phuongxa,
+                p.suckhoetinhtrang,
+                p.dienthoai_nharieng,
+                p.dienthoai_didong,
+                p.email,
+                p.tinhtrangnhansu,
+                p.thutu,
+                p.chucvu,
+                p.capbac,
+                thetu_id = db.MKV9998.Where(o => p.phong_id == o.phong_id).Select(o => o.bophan_ten).FirstOrDefault(),
+            };
             return REST.GetHttpResponseMessFromObject(re.ToList());
         }
 
@@ -164,7 +205,7 @@ namespace QLKTX_API_V2.Controllers
                     try
                     {
                         db.SaveChanges();
-                        tm.set("OK", db.MKV9999.SingleOrDefault(p => p.MKV9999_ID == val.MKV9999_ID), "Thành  công");
+                        tm.set("ADD", db.MKV9999.SingleOrDefault(p => p.MKV9999_ID == val.MKV9999_ID), "Thành  công");
                     }
                     catch (Exception d)
                     {
@@ -174,7 +215,17 @@ namespace QLKTX_API_V2.Controllers
                 }
                 else
                 {
+                    db.MKV9984.Remove(check);
+                    try
+                    {
+                        db.SaveChanges();
+                        tm.set("DELETE", db.MKV9999.SingleOrDefault(p => p.MKV9999_ID == val.MKV9999_ID), "Thành  công,ddax xoas");
+                    }
+                    catch (Exception d)
+                    {
+                        tm.set("ERR", db.MKV9999.SingleOrDefault(p => p.MKV9999_ID == val.MKV9999_ID), "xoa Thất bại: " + d.Message);
 
+                    }
                 }
                 rel.add(tm);
             }

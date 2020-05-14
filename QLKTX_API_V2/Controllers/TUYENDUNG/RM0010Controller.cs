@@ -17,6 +17,55 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         {
             return REST.GetHttpResponseMessFromObject(ungvienget.Getallungvien(filter));
         }
+        [Route("GetallCMTND")]
+        [HttpPost]
+        public HttpResponseMessage GetallCMTND([FromBody]ungvienget.filterungvien cmt)
+        {
+            return REST.GetHttpResponseMessFromObject(ungvienget.Getallungvien(cmt));
+        }
+        [Route("updatecomment")]
+        [HttpPut]
+        public HttpResponseMessage updatecomment([FromBody]RM0010 value)
+        {
+            using (DB db = new DB())
+            {
+                result<RM0010> rel = new result<RM0010>();
+                var check = db.RM0010.SingleOrDefault(p => p.RM0010_ID == value.RM0010_ID);
+                if (check != null)
+                {
+                    check.ghichu = value.ghichu;
+                    try
+                    {
+                        db.SaveChanges();
+                        rel.set("OK", null);
+                    }
+                    catch (Exception g)
+                    {
+
+                        rel.set("ERR", null, g.Message);
+                    }
+                }
+                else rel.set("NaN", null);
+                return rel.ToHttpResponseMessage();
+
+            }
+        }
+        public struct kk
+        {
+            public string cmt { get; set; }
+            public string sdt { get; set; }
+            public string email { get; set; }
+        }
+        [Route("Getghichu")]
+        [HttpPost]
+        public HttpResponseMessage Getghichu([FromBody]kk values)
+        {
+            using (DB db = new DB())
+            {
+                var d = db.RM0010.Where(p => p.CMTND_SO == values.cmt || p.EMAIL == values.email || p.MOBILE == values.sdt).Select(p=>p.ghichu).FirstOrDefault();
+                return REST.GetHttpResponseMessFromObject(d);
+            }
+        }
         [Route("add")]
         [HttpPost]
         public HttpResponseMessage add([FromBody]RM0010[] values)
@@ -31,6 +80,13 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     if (check == null)
                     {
                         RM0010 newj = value;
+                        if (newj.sophieu != null)
+                        {
+                            newj.A0028_ID = db.A0028.Where(p => p.sophieu == newj.sophieu).Select(p => p.A0028_ID).FirstOrDefault();
+                            var rm01_id = db.A0028.Where(p => p.sophieu == newj.sophieu).Select(p => p.T005C).FirstOrDefault();
+                            newj.RM0001_ID = rm01_id != null ? int.Parse(rm01_id) : 0;
+                            newj.bophanid = db.A0028.Where(p => p.sophieu == newj.sophieu).Select(p => p.T098C).FirstOrDefault();
+                        }
                         newj.trangthai = true;
                         db.RM0010.Add(newj);
                         try

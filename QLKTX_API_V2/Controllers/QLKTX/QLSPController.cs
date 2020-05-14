@@ -261,6 +261,7 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                     {
                         check.KTX0002_ID = null;
                         check.KTX0001_ID = null;
+                        check.KTX0003_ID = null;
                         check.khoaphong = null;
                         check.sotu = null;
                         string sokhoatu = check.sokhoatu;

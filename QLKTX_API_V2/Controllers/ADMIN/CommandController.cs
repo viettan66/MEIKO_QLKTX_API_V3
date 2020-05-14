@@ -24,7 +24,7 @@ namespace QLKTX_API_V2.Controllers.ADMIN
                 result<object> rel = new result<object>();
                 try
                 {
-                var kl=db.Database.SqlQuery<object>(values.cmd).ToList();
+                var kl=db.Database.SqlQuery<IQueryable>(values.cmd).ToList();
                     rel.set("OK", kl, "thành công");
 
                 }catch(Exception fd)

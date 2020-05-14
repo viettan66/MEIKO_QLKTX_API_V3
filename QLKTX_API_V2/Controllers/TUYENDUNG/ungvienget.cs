@@ -11,7 +11,12 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         public struct filterungvien
         {
             public Nullable<int> id { get; set; }
+            public string[] cmtnd { get; set; }
+            public string[] sdt { get; set; }
+            public string[] email { get; set; }
             public Nullable<bool> type { get; set; }
+            public Nullable<bool> emty { get; set; }
+            public string A0028_ID { get; set; }
         }
         public static object Getallungvien(filterungvien filter)
         {
@@ -23,6 +28,8 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.maID,
                     p.HODEM,
                     p.TEN,
+                    p.sophieu,
+                    p.A0028_ID,
                     p.NGAYSINH,
                     p.NOISINH,
                     p.CMTND_SO,
@@ -58,9 +65,11 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.RM0011_ID1,
                     p.RM0011_ID2,
                     p.trangthai,
+                    count = db.RM0010.Where(f=>f.CMTND_SO==p.CMTND_SO).Count(),
                     p.DUDINHHOCTIEPCHUYENNGANH,
                     p.DUDINHHOCTIEP,
                     p.bophanid,
+                    p.ghichu,
                     RM0001 = db.RM0001.Where(o => o.RM0001_ID == p.RM0001_ID).Select(da => new
                     {
                         da.ghiChu,
@@ -103,7 +112,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.TENTRUONG,
                         da.TYPE,
                         da.XEPLOAI,
-                    }).ToList(),
+                    }).OrderBy(fk=>fk.KETTHUC) .ToList(),
                     RM0081_B = db.RM0081_B.Where(o => o.RM0010_ID == p.RM0010_ID).Select(da => new
                     {
                         da.CHUNGCHI,
@@ -155,19 +164,48 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                         da.RM0010_ID,
                         da.RM0081_ID,
                         da.VITRI,
-                    }).ToList(),
+                    }),
                 });
                 if (filter.id != null)
                 {
                     data = data.Where(p => p.RM0010_ID == filter.id);
                     return data.FirstOrDefault();
                 }
+                if (filter.emty != null)
+                {
+                    if (filter.emty == true)
+                        data = data.Where(p => p.A0028_ID == null);
+                    if (filter.emty == false)
+                        data = data.Where(p => p.A0028_ID != null);
+                }
                 if (filter.type != null)
                 {
-                    data = data.Where(p => p.trangthai == filter.type);
-                    return data.ToList();
+                    if(filter.type==true)
+                        data = data.Where(p => p.trangthai == filter.type ||  p.trangthai == null );
+                    if(filter.type==false)
+                        data = data.Where(p => p.trangthai == false);
+                    
                 }
-                else
+                if (filter.cmtnd != null)
+                {
+                    data = data.Where(p => filter.cmtnd.Contains( p.CMTND_SO ));
+                  
+                }
+                if (filter.sdt != null)
+                {
+                    data = data.Where(p => filter.sdt.Contains( p.MOBILE ));
+                  
+                }
+                if (filter.email != null)
+                {
+                    data = data.Where(p => filter.email.Contains( p.EMAIL ));
+                  
+                }
+                if (filter.A0028_ID != null)
+                {
+                    data = data.Where(p =>  p.A0028_ID==filter.A0028_ID);
+                  
+                }
                     return data.ToList();
             }
         }
@@ -220,6 +258,18 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     check.DUDINHHOCTIEPCHUYENNGANH = value.DUDINHHOCTIEPCHUYENNGANH;
                     check.DUDINHHOCTIEP = value.DUDINHHOCTIEP;
                     check.bophanid = value.bophanid;
+                    check.A0028_ID = value.A0028_ID;
+                    check.ghichu = value.ghichu;
+                    if (value.sophieu != null)
+                    {
+                        check.A0028_ID = db.A0028.Where(p => p.sophieu == value.sophieu).Select(p => p.A0028_ID).FirstOrDefault();
+                        check.bophanid = db.A0028.Where(p => p.sophieu == value.sophieu).Select(p => p.T098C).FirstOrDefault();
+                        //check.RM0001_ID =int.Parse( db.A0028.Where(p => p.sophieu == value.sophieu).Select(p => p.T005C).FirstOrDefault());
+                    }
+                    if (value.A0028_ID != null)
+                    {
+                        check.RM0001_ID =int.Parse( db.A0028.Where(p => p.A0028_ID == value.A0028_ID).Select(p => p.T005C).FirstOrDefault());
+                    }
                     try
                     {
                         db.SaveChanges();

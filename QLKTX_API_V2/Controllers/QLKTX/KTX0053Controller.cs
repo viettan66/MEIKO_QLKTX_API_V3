@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using MEIKO_QLKTX_API_V1.Models;
+using QLKTX_API_V2.Controllers.ADMIN;
+using static QLKTX_API_V2.Controllers.ADMIN.FingerPrintData;
 
-namespace QLKTX_API_V2.Controllers.TUYENDUNG
+namespace QLKTX_API_V2.Controllers.QLKTX
 {
-    [RoutePrefix("api/RM0008")]
-    public class RM0008Controller : ApiController
+    [RoutePrefix("api/KTX0053")]
+    public class KTX0053Controller : ApiController
     {
         [Route("Getall")]
         [HttpGet]
@@ -17,45 +20,24 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         {
             using (DB db = new DB())
             {
-                var data = db.RM0008.Select(p => new
-                {
-                    p.ghiChu,
-                    p.maDiaDiem,
-                    p.RM0008_ID,
-                    p.DiaDiem,
-                });
+                var data = db.KTX0053;
                 return REST.GetHttpResponseMessFromObject(data.ToList());
-            }
-        }
-        [Route("Get/{id}")]
-        [HttpGet]
-        public HttpResponseMessage Get(int id)
-        {
-            using (DB db = new DB())
-            {
-                var data = db.RM0008.Select(p => new
-                {
-                    p.ghiChu,
-                    p.maDiaDiem,
-                    p.RM0008_ID,
-                    p.DiaDiem,
-                }).SingleOrDefault(p=>p.RM0008_ID==id);
-                return REST.GetHttpResponseMessFromObject(data);
             }
         }
         [Route("update")]
         [HttpPut]
-        public HttpResponseMessage update([FromBody]RM0008 value)
+        public HttpResponseMessage update([FromBody]KTX0053 value)
         {
             using (DB db = new DB())
             {
-                result<RM0008> rel = new result<RM0008>();
-                var check = db.RM0008.SingleOrDefault(p => p.RM0008_ID == value.RM0008_ID);
+                result<KTX0053> rel = new result<KTX0053>();
+                var check = db.KTX0053.SingleOrDefault(p => p.KTX0053_ID == value.KTX0053_ID);
                 if (check != null)
                 {
-                    check.ghiChu = value.ghiChu;
-                    check.maDiaDiem = value.maDiaDiem;
-                    check.DiaDiem = value.DiaDiem;
+                    check.buasang = value.buasang;
+                    check.buatoi = value.buatoi;
+                    check.buatrua = value.buatrua;
+                    check.ngay = value.ngay;
                     try
                     {
                         db.SaveChanges();
@@ -72,18 +54,18 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         }
         [Route("delete")]
         [HttpPut]
-        public HttpResponseMessage update([FromBody]RM0008[] values)
+        public HttpResponseMessage update([FromBody]KTX0053[] values)
         {
             using (DB db = new DB())
             {
-                results<RM0008> list = new results<RM0008>();
+                results<KTX0053> list = new results<KTX0053>();
                 values.ToList().ForEach(value =>
                 {
-                    result<RM0008> rel = new result<RM0008>();
-                    var check = db.RM0008.SingleOrDefault(p => p.RM0008_ID == value.RM0008_ID);
+                    result<KTX0053> rel = new result<KTX0053>();
+                    var check = db.KTX0053.SingleOrDefault(p => p.KTX0053_ID == value.KTX0053_ID);
                     if (check != null)
                     {
-                        db.RM0008.Remove(check);
+                        db.KTX0053.Remove(check);
                         try
                         {
                             db.SaveChanges();
@@ -104,12 +86,12 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
         }
         [Route("add")]
         [HttpPost]
-        public HttpResponseMessage add([FromBody]RM0008 value)
+        public HttpResponseMessage add([FromBody]KTX0053 value)
         {
             using (DB db = new DB())
             {
-                result<RM0008> rel = new result<RM0008>();
-                db.RM0008.Add(value);
+                result<KTX0053> rel = new result<KTX0053>();
+                db.KTX0053.Add(value);
                 try
                 {
                     db.SaveChanges();
