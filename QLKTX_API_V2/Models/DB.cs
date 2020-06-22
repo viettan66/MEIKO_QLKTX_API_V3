@@ -422,8 +422,8 @@ namespace MEIKO_QLKTX_API_V1.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int KTX0021_ID { get; set; }
         public int KTX0020_ID { get; set; }
-        public Nullable<DateTime> batdau { get; set; }
-        public Nullable<DateTime> ketthuc { get; set; }
+        public string batdau { get; set; }
+        public string ketthuc { get; set; }
         public string choo { get; set; }
         public string nghenghiepnoilam { get; set; }
         [JsonIgnore]

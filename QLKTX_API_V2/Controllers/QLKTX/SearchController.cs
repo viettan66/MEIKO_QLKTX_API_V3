@@ -18,7 +18,7 @@ public class SearchController : ApiController
             using (DB db = new DB())
             {
                 var result = timkiem.tim (value);
-                return (result.ToHttpResponseMessage());
+                return (result);
             }
         }
 

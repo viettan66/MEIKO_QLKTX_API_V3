@@ -82,9 +82,11 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                     check.truongphongGA,
                     //timkiem = timkiem.tim(new searchkey() { key = check.cmtnd_so }),
                     check.truongphongnoilamviec,
-                    KTX0001 = db.KTX0001.Where(p => p.KTX0001_ID == check.KTX0001_ID).Select(p=>new {p.ghichu,p.idcha,p.khu,p.KTX0001_ID,p.makhoa,p.slot,p.ten,p.thutu,p.trangthai,p.type}).FirstOrDefault(),
-                    KTX0021 = db.KTX0021.Where(p => p.KTX0020_ID == check.KTX0020_ID).Select(p=>new {p.batdau,p.choo,p.ketthuc,p.KTX0020_ID,p.KTX0021_ID,p.nghenghiepnoilam}).ToList(),
-                    KTX0022 = db.KTX0022.Where(p => p.KTX0020_ID == check.KTX0020_ID).Select(p=>new {p.ChoOHienNay,p.HoTen,p.KTX0020_ID,p.KTX0022_ID,p.NamSinh,p.NgheNghiep,p.QuanHe }).ToList(),
+                    KTX0001 = db.Database.SqlQuery<KTX0001>("select * from ktx0001 where KTX0001_id=" + (check.KTX0001_ID != null ? check.KTX0001_ID : 0)).FirstOrDefault(),
+                    KTX0002 =db.Database.SqlQuery<KTX0002>("select * from ktx0002 where KTX0002_id="+(check.KTX0002_ID!=null?check.KTX0002_ID:0)).FirstOrDefault(),
+                    KTX0003 =db.Database.SqlQuery<KTX0003>("select * from ktx0003 where KTX0003_id="+(check.KTX0003_ID!=null?check.KTX0003_ID:0)).FirstOrDefault(),
+                    KTX0021 = db.Database.SqlQuery<KTX0021>("select * from ktx0021 where KTX0020_id=" + check.KTX0020_ID).ToList(),
+                    KTX0022 = db.Database.SqlQuery<KTX0022>("select * from ktx0022 where KTX0020_id=" + check.KTX0020_ID ).ToList(),
                     MKV9999 = (db.MKV9999.Where(f => check.MKV9999_ID == f.MKV9999_ID)).ToList().Select(f => new
                     {
                         f.MKV9999_ID,

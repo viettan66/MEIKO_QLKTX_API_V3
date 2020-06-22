@@ -65,11 +65,17 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.RM0011_ID1,
                     p.RM0011_ID2,
                     p.trangthai,
-                    count = db.RM0010.Where(f=>f.CMTND_SO==p.CMTND_SO).Count(),
+                    count = db.RM0010.Where(f=>((f.CMTND_SO==p.CMTND_SO&&p.CMTND_SO!=null)||
+                                        (f.MOBILE==p.MOBILE&&p.MOBILE!=null)||
+                                        (f.EMAIL==p.EMAIL&&p.EMAIL!=null)
+                    )).Count(),
                     p.DUDINHHOCTIEPCHUYENNGANH,
                     p.DUDINHHOCTIEP,
                     p.bophanid,
                     p.ghichu,
+                    p.Headhunt,
+                    p.Position,
+                    p.Date,
                     RM0001 = db.RM0001.Where(o => o.RM0001_ID == p.RM0001_ID).Select(da => new
                     {
                         da.ghiChu,
@@ -188,19 +194,21 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                 }
                 if (filter.cmtnd != null)
                 {
-                    data = data.Where(p => filter.cmtnd.Contains( p.CMTND_SO ));
+                    data = data.Where(p => (filter.cmtnd.Contains( p.CMTND_SO )&&p.CMTND_SO!=null)
+                    ||(filter.sdt.Contains( p.MOBILE )&&p.MOBILE != null)||(filter.email.Contains( p.EMAIL )&&p.EMAIL != null)
+                    );
                   
                 }
-                if (filter.sdt != null)
-                {
-                    data = data.Where(p => filter.sdt.Contains( p.MOBILE ));
+                //if (filter.sdt != null)
+                //{
+                //    data = data.Where(p => filter.sdt.Contains( p.MOBILE ));
                   
-                }
-                if (filter.email != null)
-                {
-                    data = data.Where(p => filter.email.Contains( p.EMAIL ));
+                //}
+                //if (filter.email != null)
+                //{
+                //    data = data.Where(p => filter.email.Contains( p.EMAIL ));
                   
-                }
+                //}
                 if (filter.A0028_ID != null)
                 {
                     data = data.Where(p =>  p.A0028_ID==filter.A0028_ID);
@@ -260,6 +268,9 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     check.bophanid = value.bophanid;
                     check.A0028_ID = value.A0028_ID;
                     check.ghichu = value.ghichu;
+                    check.Headhunt = value.Headhunt;
+                    check.Position = value.Position;
+                    check.Date = value.Date;
                     if (value.sophieu != null)
                     {
                         check.A0028_ID = db.A0028.Where(p => p.sophieu == value.sophieu).Select(p => p.A0028_ID).FirstOrDefault();

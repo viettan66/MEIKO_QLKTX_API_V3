@@ -371,6 +371,14 @@
     <Compile Include="Migrations\202005080823526_mydb9.designer.cs">
       <DependentUpon>202005080823526_mydb9.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005220808380_mydb11.cs" />
+    <Compile Include="Migrations\202005220808380_mydb11.designer.cs">
+      <DependentUpon>202005220808380_mydb11.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006030129069_mydb17.cs" />
+    <Compile Include="Migrations\202006030129069_mydb17.designer.cs">
+      <DependentUpon>202006030129069_mydb17.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DB.cs" />
     <Compile Include="Models\result.cs" />
@@ -484,6 +492,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202005080823526_mydb9.resx">
       <DependentUpon>202005080823526_mydb9.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005220808380_mydb11.resx">
+      <DependentUpon>202005220808380_mydb11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006030129069_mydb17.resx">
+      <DependentUpon>202006030129069_mydb17.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

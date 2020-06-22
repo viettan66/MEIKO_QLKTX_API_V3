@@ -1,9 +1,12 @@
-﻿using System;
+﻿using MEIKO_QLKTX_API_V1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace QLKTX_API_V2.Controllers
 {
@@ -22,8 +25,31 @@ namespace QLKTX_API_V2.Controllers
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
+        public struct kkkk
         {
+            public string url { get; set; }
+            public string manhansu { get; set; }
+            public DateTime date { get; set; }
+        }
+        public HttpResponseMessage Post([FromBody]kkkk value)
+        {
+            using (var db = new DB())
+            {
+                var id = db.MKV9999.Where(df => df.manhansu == value.manhansu).Select(f => f.id).FirstOrDefault();
+                if (id != null)
+                {
+                    WebClient webC = new WebClient();
+                    webC.Encoding = Encoding.UTF8;
+                    string f= webC.DownloadString(value.url + id + "/" + value.date.Month + "/" + value.date.Year + "/1");
+                    return REST.GetHttpResponseMessFromObject(JsonConvert.DeserializeObject(f));
+
+                }
+                else
+                {
+                    return REST.GetHttpResponseMessFromObject(null);
+                }
+            }
+                
         }
 
         // PUT api/values/5

@@ -3,28 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MEIKO_QLKTX_API_V1.Models;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
 
-    public static class timkiem
+public static class timkiem
     {
 
-        public static valuesearch tim(searchkey value)
+        public static HttpResponseMessage tim(searchkey value)
         {
             using (var db = new DB())
             {
                valuesearch result = new valuesearch();
-                result.KTX0020 = (from temp in db.KTX0020
-                                  where temp.hotenkhaisinh == value.key ||
+                result.KTX0020 =  db.KTX0020.AsEnumerable().Where(temp=>
+                                  temp.hotenkhaisinh == value.key ||
                                     temp.hotenkhac == value.key ||
                                     temp.cmtnd_so == value.key ||
                                     temp.didong == value.key ||
-                                    temp.MKV9999_ID == (db.MKV9999.FirstOrDefault(p => p.manhansu == value.key).MKV9999_ID) ||
-                                    temp.khoaphong == value.key ||
-                                    temp.sotu == value.key ||
-                                    temp.sokhoatu == value.key ||
-                                    temp.KTX0001_ID!=null&& temp.KTX0001_ID ==  (db.KTX0001.FirstOrDefault(p => p.ten == value.key).KTX0001_ID) ||
-                                    temp.KTX0002_ID!=null&& temp.KTX0002_ID == (db.KTX0002.FirstOrDefault(p => p.ten == value.key).KTX0002_ID) ||
-                                    temp.KTX0003_ID!=null&& temp.KTX0003_ID == (db.KTX0003.FirstOrDefault(p => p.MaKhoa == value.key).KTX0003_ID)
-                                  select new
+                                    temp.MKV9999_ID == (db.MKV9999.Where(p => p.manhansu == value.key).Select(p=>p.MKV9999_ID).FirstOrDefault()) ||
+                                    temp.khoaphong == value.key //||
+                                    //temp.sotu == value.key ||
+                                    //temp.sokhoatu == value.key ||
+                                    //temp.KTX0001_ID != null && temp.KTX0001_ID == (db.KTX0001.Where(p => p.ten == value.key).Select(p => p.KTX0001_ID).FirstOrDefault()) ||
+                                    //temp.KTX0002_ID != null && temp.KTX0002_ID == (db.KTX0002.Where(p => p.ten == value.key).Select(p => p.KTX0002_ID).FirstOrDefault()) ||
+                                    //temp.KTX0003_ID != null && temp.KTX0003_ID == (db.KTX0003.Where(p => p.SoTu == value.key).Select(p => p.KTX0003_ID).FirstOrDefault())
+                                  ).Select(temp=> new
                                   {
                                       temp.KTX0020_ID,
                                       temp.MKV9999_ID,
@@ -77,9 +80,10 @@ using MEIKO_QLKTX_API_V1.Models;
                                       temp.trinhdohocvan,
                                       temp.truongphongGA,
                                       temp.truongphongnoilamviec,
-                                      KTX0001 = db.KTX0001.Where(p => p.KTX0001_ID == temp.KTX0001_ID).FirstOrDefault(),
-                                      KTX0002 = db.KTX0002.Where(p => p.KTX0002_ID == temp.KTX0002_ID).FirstOrDefault(),
-                                      KTX0021 = db.KTX0021.Where(p => p.KTX0020_ID == temp.KTX0020_ID).ToList(),
+                                      KTX0001 = db.Database.SqlQuery<KTX0001>("select * from ktx0001 where KTX0001_id=" + (temp.KTX0001_ID != null ? temp.KTX0001_ID : 0)).FirstOrDefault(),
+                                      KTX0002 = db.Database.SqlQuery<KTX0002>("select * from ktx0002 where KTX0002_id=" + (temp.KTX0002_ID != null ? temp.KTX0002_ID : 0)).FirstOrDefault(),
+                                      KTX0003 = db.Database.SqlQuery<KTX0003>("select * from ktx0003 where KTX0003_id=" + (temp.KTX0003_ID != null ? temp.KTX0003_ID : 0)).FirstOrDefault(),
+                                      //KTX0021 = db.KTX0021.Where(p => p.KTX0020_ID == temp.KTX0020_ID).ToList(),
                                       KTX0031 = (from temp2 in db.KTX0031
                                                  where temp2.MKV9999_ID == temp.MKV9999_ID && temp.trangthai == true
                                                  select new
@@ -278,7 +282,7 @@ using MEIKO_QLKTX_API_V1.Models;
                                                  })
                                   }).ToList();
 
-                return ( result);
+                return (REST.GetHttpResponseMessFromObject( result));
 
             }
         }

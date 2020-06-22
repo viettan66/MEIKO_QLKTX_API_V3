@@ -17,8 +17,16 @@ namespace QLKTX_API_V2.Controllers
     {
         public struct getdataOnDB
         {
-            public int count { get; set; }
+            public string ngay { get; set; }
+            public int MKV9999_ID { get; set; }
+            public string ngaycohieuluc { get; set; }
+            public string phong { get; set; }
+            public string hoten { get; set; }
             public string User_ID { get; set; }
+            public string manhansu { get; set; }
+            public string bophan_ten { get; set; }
+            public string capbac { get; set; }
+            public string cmtnd_so { get; set; }
         }
         public struct getdataOnDB2
         {
@@ -40,6 +48,7 @@ namespace QLKTX_API_V2.Controllers
             public Nullable<DateTime> startdate { get; set; }
             public Nullable<DateTime> enddate { get; set; }
             public Nullable<int> style { get; set; }
+            public string id { get; set; }
         }
         [Route("Getall")]
         [HttpPost]
@@ -73,118 +82,24 @@ namespace QLKTX_API_V2.Controllers
                     var temp = db.Database.SqlQuery<count>("select count( User_ID ) as counts from KTX0050 where Verify_Date>='" + startdate + "' and  Verify_Date<='" + enddate + "' and ip in ("+iptemp.TrimEnd(',')+")");
                     object data = null;
                     if(filter.style==2)
-                     data = db.Database.SqlQuery<getdataOnDB>("select distinct User_ID ,count=( select count (distinct CONVERT(char(10), Verify_Date,126)) from ktx0050 where Verify_Date>='" + startdate + "' and  Verify_Date<='" + enddate + "'and G.User_ID= ktx0050.User_ID ) from KTX0050 as G where Verify_Date>='" + startdate + "' and  Verify_Date<='" + enddate + "'  and ip in (" + iptemp.TrimEnd(',') + ")")
-                        .Select(p => new
-                        {
-                            count = p.count,
-                            list = db.Database.SqlQuery<string>("select  distinct CONVERT(varchar, Verify_Date,112)  from ktx0050 where Verify_Date>='" + startdate + "'  and  Verify_Date<='" + enddate + "' and  ktx0050.User_ID= '"+p.User_ID+ "'  and ip in (" + iptemp.TrimEnd(',') + ")"),
-                        p.User_ID,
-                            MKV9999 = (from l in db.MKV9999
-                                       where l.manhansu == ("00000000".Substring(0, 6 - p.User_ID.Length) + p.User_ID)
-                                       select new
-                                       {
-                                           l.MKV9999_ID,
-                                           l.manhansu,
-                                           l.id,
-                                           l.hodem,
-                                           l.ten,
-                                           l.ngaysinh,
-                                           l.gioitinh,
-                                           l.noisinh,
-                                           l.quequan,
-                                           l.diachithuongtru,
-                                           l.diachitamtru,
-                                           l.cmtnd_so,
-                                           l.cmtnd_ngayhethan,
-                                           l.cmtnd_noicap,
-                                           l.phong_id,
-                                           l.ban_id,
-                                           l.congdoan_id,
-                                           l.chucvu_id,
-                                           l.dienthoai_nharieng,
-                                           l.dienthoai_didong,
-                                           l.chucvu,
-                                           l.capbac,
-                                           thetu_id = db.MKV9998.Where(o => l.phong_id == o.phong_id).Select(o => o.bophan_ten).FirstOrDefault(),
-                                       }).FirstOrDefault()
-                        }) ;
+                     data = db.Database.SqlQuery<getdataOnDB>(@"DECLARE @ip ListIP;
+INSERT INTO @ip ( ip ) VALUES ("+ iptemp.TrimEnd(',').Replace(",","),(") + @")
+EXECUTE Getravaocong2 @List=@ip,@startdate='" + startdate + "',@enddate='" + enddate + "'").ToList() ;
                    else if(filter.style==1)
-                     data = db.Database.SqlQuery<getdataOnDB2>(@"select  User_ID ,buasang=( select count( CONVERT(varchar, Verify_Date,108))  from ktx0050 where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"' and 
-					CONVERT(varchar, Verify_Date,108)>='06:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='09:00:00' and 
-					G.User_ID= ktx0050.User_ID  and ip in (" + iptemp.TrimEnd(',') + @")) ,
-
-					thanhtienbuasang=(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buasang from KTX0053 where  ngay<='" + startdate + @"' order by ngay desc)  from ktx0050  where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"' and 
-					CONVERT(varchar, Verify_Date,108)>='06:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='09:00:00' and 
-					G.User_ID= ktx0050.User_ID    and ip in (" + iptemp.TrimEnd(',') + @") ))
-					,
-
-				buatrua=( select count( CONVERT(varchar, Verify_Date,108))  from ktx0050 where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"' and 
-					CONVERT(varchar, Verify_Date,108)>='10:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='12:30:00' and 
-					G.User_ID= ktx0050.User_ID   and ip in (" + iptemp.TrimEnd(',') + @")  ) ,
-					
-					thanhtienbuatrua=(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buatrua from KTX0053 where  ngay<='" + startdate + @"' order by ngay desc)  from ktx0050  where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"' and 
-					CONVERT(varchar, Verify_Date,108)>='10:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='12:30:00' and 
-					G.User_ID= ktx0050.User_ID   and ip in (" + iptemp.TrimEnd(',') + @")  )),
-				buatoi=( select count( CONVERT(varchar, Verify_Date,108))  from ktx0050 where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"' and 
-					CONVERT(varchar, Verify_Date,108)>='17:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='19:30:00' and 
-					G.User_ID= ktx0050.User_ID    and ip in (" + iptemp.TrimEnd(',') + @") )  ,
-					
-					thanhtienbuatoi=(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buatoi from KTX0053 where  ngay<='" + startdate + @"' order by ngay desc)  from ktx0050  where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"' and 
-					CONVERT(varchar, Verify_Date,108)>='17:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='19:30:00' and 
-					G.User_ID= ktx0050.User_ID   and ip in (" + iptemp.TrimEnd(',') + @")  ))
-from KTX0050 as G where 
-					Verify_Date>='" + startdate + @"'  and  
-					Verify_Date<='" + enddate + @"'  and ip in (" + iptemp.TrimEnd(',') + @") 
-group by User_ID")
-                        .Select(p => new
-                        {p.buasang,p.buatoi,p.buatrua,p.User_ID,p.thanhtienbuasang,p.thanhtienbuatoi,p.thanhtienbuatrua,
-                            MKV9999 = (from l in db.MKV9999
-                                       where l.manhansu == ("00000000".Substring(0, 6 - p.User_ID.Length) + p.User_ID)
-                                       select new
-                                       {
-                                           l.MKV9999_ID,
-                                           l.manhansu,
-                                           l.id,
-                                           l.hodem,
-                                           l.ten,
-                                           l.ngaysinh,
-                                           l.gioitinh,
-                                           l.noisinh,
-                                           l.quequan,
-                                           l.diachithuongtru,
-                                           l.diachitamtru,
-                                           l.cmtnd_so,
-                                           l.cmtnd_ngayhethan,
-                                           l.cmtnd_noicap,
-                                           l.phong_id,
-                                           l.ban_id,
-                                           l.congdoan_id,
-                                           l.chucvu_id,
-                                           l.dienthoai_nharieng,
-                                           l.dienthoai_didong,
-                                           l.chucvu,
-                                           l.capbac,
-                                           thetu_id = db.MKV9998.Where(o => l.phong_id == o.phong_id).Select(o => o.bophan_ten).FirstOrDefault(),
-                                       }).FirstOrDefault(),
-                        }) ;
+                     data = db.Database.SqlQuery<getdataOnDB2>(@"DECLARE @ip ListIP;
+INSERT INTO @ip ( ip ) VALUES ("+ iptemp.TrimEnd(',').Replace(",","),(") + @")
+EXECUTE getxuatan @List=@ip,@startdate='" + startdate + "',@enddate='" + enddate + "'").AsEnumerable().Select(p => new
+                     {
+                         p.buasang,
+                         p.buatoi,
+                         p.buatrua,
+                         p.User_ID,
+                         p.thanhtienbuasang,
+                         p.thanhtienbuatoi,
+                         p.thanhtienbuatrua,
+                         ngayvao=db.Database.SqlQuery<Nullable< DateTime>>("execute getngayvao @id='"+p.User_ID+"'").FirstOrDefault(),
+                         phong=db.Database.SqlQuery<string>("execute Getphong @id='" + p.User_ID+"'").FirstOrDefault()
+                     }).ToList() ;
                     int kkkk = temp.FirstOrDefault().counts;
                     if (list.Count >kkkk )
                     {
@@ -200,5 +115,39 @@ group by User_ID")
             }
 
         }
+        public struct datareturn
+        {
+            public string User_ID { get; set; }
+            public Nullable<DateTime> Verify_Date { get; set; }
+            public string loaibuaan { get; set; }
+        }
+    [Route("getdetail")]
+    [HttpPost]
+    public HttpResponseMessage getdetail([FromBody]filter filter)
+        {
+            string startdate = DateTime.Parse(filter.startdate.ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+            string enddate = DateTime.Parse(filter.enddate.ToString()).ToString("yyyy-MM-dd HH:mm:ss");
+            string iptemp = "";
+            filter.ip.ToList().ForEach(fff =>
+            {
+                iptemp += "'" + fff.ip + "'" + ",";
+            });
+            using (DB db=new DB())
+        {
+            var data = db.Database.SqlQuery<datareturn>(@"select  User_ID ,Verify_Date,
+             CASE 
+                  WHEN CONVERT(varchar, Verify_Date,108)>='05:00:00' and CONVERT(varchar, Verify_Date,108)<='09:30:00' THEN N'Bữa sáng' 
+                  WHEN CONVERT(varchar, Verify_Date,108)>='10:00:00' and CONVERT(varchar, Verify_Date,108)<='13:00:00' THEN N'Bữa trưa' 
+                  WHEN CONVERT(varchar, Verify_Date,108)>='16:30:00' and CONVERT(varchar, Verify_Date,108)<='20:00:00' THEN N'Bữa tối' 
+                  ELSE N'Không tính tiền'
+             END as loaibuaan
+
+from KTX0050 as G where 
+					Verify_Date>='" + startdate + "' and  Verify_Date<='" + enddate + "'  and ip in (" + iptemp.TrimEnd(',') + ") and User_ID='" + filter.id+"' ");
+            return REST.GetHttpResponseMessFromObject(data);
+        }
     }
+    }
+
+
 }

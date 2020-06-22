@@ -17,56 +17,53 @@ namespace QLKTX_API_V2.Controllers
 
             using (DB db = new DB())
             {
-                var acc = (from p in db.MKV9999
-                           select new
-                           {
-                               p.MKV9999_ID,
-                               p.manhansu,
-                               p.matkhau,
-                               p.id,
-                               p.hodem,
-                               p.ten,
-                               p.type,
-                               p.ngaysinh,
-                               p.gioitinh,
-                               p.noisinh,
-                               p.quequan,
-                               p.diachithuongtru,
-                               p.diachitamtru,
-                               p.cmtnd_so,
-                               p.cmtnd_ngayhethan,
-                               p.cmtnd_noicap,
-                               p.hochieu_so,
-                               p.hochieu_ngaycap,
-                               p.hochieu_ngayhethan,
-                               p.ngayvaocongty,
-                               p.phong_id,
-                               p.ban_id,
-                               p.congdoan_id,
-                               p.chucvu_id,
-                               p.nganhang_stk,
-                               p.nganhang_id,
-                               p.sosobaohiem,
-                               p.honnhantinhtrang,
-                               p.datnuoc_id,
-                               p.phuongxa,
-                               p.suckhoetinhtrang,
-                               p.dienthoai_nharieng,
-                               p.dienthoai_didong,
-                               p.email,
-                               p.tinhtrangnhansu,
-                               p.thutu,
-                               p.chucvu,
-                               p.capbac,
-                               thetu_id = db.MKV9998.Where(o => p.phong_id == o.phong_id).Select(o => o.bophan_ten).FirstOrDefault(),
-                           }).ToList();
+                var acc = db.Database.SqlQuery<MKV9999>(@"SELECT [MKV9999_ID]
+      ,[manhansu]
+      ,[matkhau]
+      ,[id]
+      ,[hodem]
+      ,[ten]
+      ,[ngaysinh]
+      ,[gioitinh]
+      ,[noisinh]
+      ,[quequan]
+      ,[diachithuongtru]
+      ,[diachitamtru]
+      ,[cmtnd_so]
+      ,[cmtnd_ngayhethan]
+      ,[cmtnd_noicap]
+      ,[hochieu_so]
+      ,[hochieu_ngaycap]
+      ,[hochieu_ngayhethan]
+      ,[ngayvaocongty]
+      ,[phong_id]
+      ,[ban_id]
+      ,[congdoan_id]
+      ,[chucvu_id]
+      ,[nganhang_stk]
+      ,[nganhang_id]
+      ,[sosobaohiem]
+      ,[honnhantinhtrang]
+      ,[datnuoc_id]
+      ,[phuongxa]
+      ,[suckhoetinhtrang]
+      ,[dienthoai_nharieng]
+      ,[dienthoai_didong]
+      ,[email]
+      ,[tinhtrangnhansu]
+      ,[thutu]
+      ,[chucvu]
+      ,[capbac]
+      ,thetu_id=(SELECT bophan_ten FROM MKV9998 where phong_id=G.phong_id )
+      ,[type]
+  FROM MKV9999 as G " + ((filter.id!=null||filter.manhansu!=null)?" where ":"")+(filter.id!=null?(" MKV9999_ID ="+filter.id):"")+(filter.manhansu!=null?(" manhansu ='" + filter.manhansu+"'"):"") );
                 if (filter.id != null)
                 {
-                    return acc.Where(p => p.MKV9999_ID == filter.id).FirstOrDefault();
+                    return acc.FirstOrDefault();
                 }
                 if (filter.manhansu != null)
                 {
-                    return acc.Where(p => p.manhansu == filter.manhansu).FirstOrDefault();
+                    return acc.FirstOrDefault();
                 }
                 return acc;
             }

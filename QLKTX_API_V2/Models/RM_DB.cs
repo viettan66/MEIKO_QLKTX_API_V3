@@ -205,6 +205,9 @@ namespace MEIKO_QLKTX_API_V1.Models
         public string bophanid { get; set; }
         public string A0028_ID { get; set; }
         public string ghichu { get; set; }
+        public string Headhunt { get; set; }
+        public string Position { get; set; }
+        public string Date { get; set; }
         public Nullable<int> sophieu { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

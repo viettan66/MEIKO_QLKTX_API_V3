@@ -112,7 +112,7 @@ namespace QLKTX_API_V2.Controllers.TUYENDUNG
                     p.T100C,
                     p.tinhtrang,
                     ok = db.RM0015.Where(f => db.RM0010.Where(g => g.A0028_ID == p.A0028_ID).Select(g => g.RM0010_ID).Contains(f.RM0010_ID) && f.ketQua == true).Count(),
-                    wait = db.RM0010.Where(g => g.A0028_ID == p.A0028_ID).Count() - db.RM0015.Where(f => db.RM0010.Where(g => g.A0028_ID == p.A0028_ID).Select(g => g.RM0010_ID).Contains(f.RM0010_ID) && f.ketQua == false).Count(),
+                    wait = db.RM0010.Where(g => g.A0028_ID == p.A0028_ID).Count() - db.RM0015.Where(f => db.RM0010.Where(g => g.A0028_ID == p.A0028_ID).Select(g => g.RM0010_ID).Contains(f.RM0010_ID) && f.ketQua == false).Distinct().Count(),
                     A0028D = db.A0028D.Where(f => f.A0028_ID == p.A0028_ID).FirstOrDefault(),
                     RM0001 = db.RM0001.Where(f => f.RM0001_ID + "" == p.T005C).Select(f => new { f.ghiChu, f.maCongViec, f.moTa, f.RM0001_ID, f.RM0004_ID, f.tenCongViec, f.thuTu, f.tinhTrang }).FirstOrDefault(),
                     RM0002 = db.RM0002.Where(f => f.RM0002_ID + "" == p.A0028D.C014C).Select(f => new { f.ghiChu, f.maLinhVuc, f.RM0002_ID, f.tenLinhVuc, f.thuTu, f.tinhTrang }).FirstOrDefault(),

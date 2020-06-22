@@ -52,43 +52,55 @@ namespace QLKTX_API_V2.Controllers
             public Nullable<float> thanhtien { get; set; }
             
         }
+        public struct kj
+        {
+            public KTX0049 values { get; set; }
+            public string[] ip { get; set; }
+        }
         [Route("GetPay")]
         [HttpPost]
-        public HttpResponseMessage GetPay([FromBody] KTX0049 values)
+        public HttpResponseMessage GetPay(kj values)
         {
             using (DB db = new DB())
             {
-                var check = db.Database.SqlQuery<KTX0049>(@"select * from ktx0049 where user_ID='" + values.User_ID + @"'").FirstOrDefault();
+                var ipp = "";
+                values.ip.ToList().ForEach(f =>
+                {
+                    ipp += "'" + f + "',";
+
+                });
+                ipp = ipp.TrimEnd(',');
+                var check = db.Database.SqlQuery<KTX0049>(@"select * from ktx0049 where user_ID='" + values.values.User_ID + @"'").FirstOrDefault();
                 if (check == null)
                 {
-                    return REST.GetHttpResponseMessFromObject(new {User_ID=values.User_ID,thanhtien=0 });
+                    return REST.GetHttpResponseMessFromObject(new {User_ID=values.values.User_ID,thanhtien=0 });
                 }
                 int k=0;
-                if(int.TryParse(values.User_ID, out k))
+                if(int.TryParse(values.values.User_ID, out k))
                 {
-                    values.User_ID = k + "";
+                    values.values.User_ID = k + "";
                 }
-                var startdate = check.startdate < values.startdate ? values.startdate : check.startdate;
-                var enddate = check.enddate < values.enddate ? check.enddate  :values.enddate;
+                var startdate = check.startdate < values.values.startdate ? values.values.startdate : check.startdate;
+                var enddate = check.enddate < values.values.enddate ? check.enddate  :values.values.enddate;
                 var data = db.Database.SqlQuery<thanh>(@"select  User_ID ,
 					thanhtien=(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buasang from KTX0053 where  ngay<='"+startdate+@"' order by ngay desc)  from ktx0050  where 
 					Verify_Date>='"+startdate+@"'  and  
 					Verify_Date<='"+enddate+@"' and 
-					CONVERT(varchar, Verify_Date,108)>='06:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='09:00:00' and 
-					G.User_ID= ktx0050.User_ID    ))
+					CONVERT(varchar, Verify_Date,108)>='05:00:00' and 
+					CONVERT(varchar, Verify_Date,108)<='09:30:00' and 
+					G.User_ID= ktx0050.User_ID   and ip in("+ipp+@")  ))
 					+(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buatrua from KTX0053 where  ngay<='"+startdate+@"' order by ngay desc)  from ktx0050  where 
 					Verify_Date>='"+startdate+@"'  and  
 					Verify_Date<='"+enddate+@"' and 
-					CONVERT(varchar, Verify_Date,108)>='10:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='12:30:00' and 
-					G.User_ID= ktx0050.User_ID    ))+(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buatoi from KTX0053 where  ngay<='"+startdate+@"' order by ngay desc)  from ktx0050  where 
+					CONVERT(varchar, Verify_Date,108)>='10:00:00' and 
+					CONVERT(varchar, Verify_Date,108)<='13:00:00' and 
+					G.User_ID= ktx0050.User_ID   and ip in("+ipp+@")  ))+(( select count( CONVERT(varchar, Verify_Date,108))*(select top (1) buatoi from KTX0053 where  ngay<='"+startdate+@"' order by ngay desc)  from ktx0050  where 
 					Verify_Date>='"+startdate+@"'  and  
 					Verify_Date<='"+enddate+@"' and 
-					CONVERT(varchar, Verify_Date,108)>='17:30:00' and 
-					CONVERT(varchar, Verify_Date,108)<='19:30:00' and 
-					G.User_ID= ktx0050.User_ID    ))
-from KTX0050 as G where Verify_Date>='"+startdate+@"' and  Verify_Date<='"+enddate+@"' and User_ID = '"+values.User_ID+@"'
+					CONVERT(varchar, Verify_Date,108)>='16:30:00' and 
+					CONVERT(varchar, Verify_Date,108)<='20:00:00' and 
+					G.User_ID= ktx0050.User_ID   and ip in("+ipp+@")  ))
+from KTX0050 as G where Verify_Date>='"+startdate+@"' and  Verify_Date<='"+enddate+@"' and User_ID = '"+values.values.User_ID+@"' and ip in("+ipp+@")
 group by User_ID").FirstOrDefault();
                return REST.GetHttpResponseMessFromObject(data);
             }

@@ -237,6 +237,17 @@ namespace QLKTX_API_V2.Controllers.QLKTX
                 return REST.GetHttpResponseMessFromObject(temp);
             }
         }
+        [Route("GetMKV9999_ID/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetMKV9999_ID(string id)
+        {
+            using (DB db = new DB())
+            {
+                var temp = db.KTX0001.Where(p => p.KTX0001_ID == db.KTX0020.Where(f=>f.MKV9999_ID==db.MKV9999.Where(b=>b.manhansu==id).Select(b=>b.MKV9999_ID).FirstOrDefault()).Select(f=>f.KTX0001_ID).FirstOrDefault()).Select(f=>new { f.ten}).FirstOrDefault();
+
+                return REST.GetHttpResponseMessFromObject(temp);
+            }
+        }
         [Route("Update")]
         [HttpPut]
         public HttpResponseMessage Update([FromBody]KTX0001 value)
